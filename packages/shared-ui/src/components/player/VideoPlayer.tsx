@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import Video, { VideoRef } from "react-native-video";
+import Video, { VideoRef, ReactVideoProps } from "react-native-video";
 import {
   StyleSheet,
   Platform,
@@ -38,10 +38,10 @@ const VideoPlayer = React.memo(
       const videoSource = useMemo(() => ({ uri: movie }), [movie]);
 
       // Memoize poster object to prevent unnecessary re-renders
-      const posterConfig = useMemo(
+      const posterConfig = useMemo<ReactVideoProps['poster']>(
         () =>
           Platform.OS === "web"
-            ? {}
+            ? undefined
             : {
                 source: { uri: headerImage },
                 resizeMode: "cover" as const,

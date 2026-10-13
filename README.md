@@ -299,6 +299,59 @@ yarn lint       # Lint code
 
 ## Development
 
+### One-command Android TV startup (Windows)
+
+From the repository root on the existing `hackathon` branch:
+
+```powershell
+cd C:\tvapp
+yarn.cmd tv:start
+```
+
+Prerequisites: Node.js compatible with this Expo checkout, Yarn 4.5.0, dependencies installed with `yarn.cmd install --immutable`, JDK 17 (Java on PATH and a valid JAVA_HOME if set), and the existing generated `apps/expo-multi-tv/android` project. In Android Studio's SDK Manager install Platform-Tools, Android Emulator, the project's SDK platform (currently API 36), and build tools requested by Gradle. Accept SDK licenses there. Device Manager should contain an Android TV AVD named `Hackathon_TV` with its system image installed and Windows virtualization enabled.
+
+The launcher discovers the SDK from `ANDROID_HOME`, `ANDROID_SDK_ROOT`, existing `local.properties`, common SDK locations, or tools on PATH, validating both executables before use. It sets SDK variables/PATH only in its child process, updates only `sdk.dir` in the ignored native `local.properties`, lists devices, reuses a running TV emulator, or starts `Hackathon_TV` and waits up to five minutes for Android and its package manager. It then calls the existing `yarn.cmd dev:android` workflow with the selected AVD name. Phones are not selected. Offline unidentified emulators cause a clear stop to avoid duplicate startup. It neither installs dependencies nor runs a clean prebuild. A failed build remains a failed command.
+
+```powershell
+# Read-only project diagnostics; does not write properties, boot an AVD, or build.
+yarn.cmd tv:start -CheckOnly
+# For a custom SDK location, copy the real Android SDK Location from SDK Manager.
+yarn.cmd tv:start -SdkPath "D:\Android SDK"
+# Optional: select another existing TV AVD or extend the boot timeout.
+yarn.cmd tv:start -AvdName Hackathon_TV -BootTimeoutSeconds 600
+```
+
+For an undetected SDK, open Android Studio > Settings > Languages & Frameworks > Android SDK, or Tools > SDK Manager, and copy **Android SDK Location**. For a missing AVD, create one in Device Manager using an Android TV device/system image and the required name. If an emulator is offline, allow it to finish starting or close it through Device Manager and retry. For startup/boot failures, launch it in Device Manager to inspect the system-image or virtualization error. The launcher leaves emulators running on failure and never wipes their data.
+
+If ADB reports `\.android` or permission denied, run this command in a normal PowerShell terminal under your Windows account, outside any restricted automation sandbox. Check your profile path and any `ANDROID_USER_HOME`, `ANDROID_EMULATOR_HOME`, or `ANDROID_AVD_HOME` overrides; correct stale overrides in that terminal. Inspect the affected directory's ownership/permissions with Windows Properties > Security, or ask your administrator if policy-managed. Do not delete `.android`, reset ADB keys, or loosen ACLs. Android's directory variables are documented in [Android SDK environment variables](https://developer.android.com/tools/variables). The launcher reports this failure without attempting a security workaround.
+
+The root command locates Windows PowerShell through `SystemRoot`, so PowerShell itself need not be on PATH. Its `-ExecutionPolicy Bypass` applies only to that launched process and does not change saved user/machine policies; organization-enforced policy still takes precedence. The script also supports PowerShell 7 when invoked directly with `pwsh -File ./scripts/start-tv.ps1`. SDK/PATH changes do not persist in the parent terminal, so a standalone `adb` command there may still need its full SDK path.
+
+Press **Ctrl+C** to stop the development server/build. To close just the app, use the emulator's Home button. To stop the emulator, close its window or stop it in Device Manager. For a command-line stop, use the discovered SDK's full ADB path and the serial printed by the launcher: `& "<SDK>\platform-tools\adb.exe" -s emulator-5554 emu kill` (replace the example serial with your actual device).
+
+### Hackathon validation on Windows
+
+Use Yarn 4.5.0. If PowerShell blocks `yarn.ps1`, use `yarn.cmd` for the same commands.
+
+```powershell
+yarn.cmd install --immutable
+yarn.cmd workspace @multi-tv/shared-ui run typecheck
+yarn.cmd workspace @multi-tv/expo-multi-tv run typecheck
+yarn.cmd workspace @multi-tv/shared-ui run lint
+yarn.cmd workspace @multi-tv/expo-multi-tv run lint
+yarn.cmd workspace @multi-tv/shared-ui run test --runInBand --silent
+yarn.cmd workspace @multi-tv/expo-multi-tv run start
+```
+
+Yarn uses workspace-limited node_modules hoisting. Shared native/UI imports are peer dependencies supplied by each app; `mitt` and `@bam.tech/lrud` are direct shared dependencies. `tsconfig.consumer.json` resolves shared peer types against the primary Expo app without installing another React or React Native runtime in shared UI. The shared typecheck keeps its full source include and checks Vega media imports against installed Vega packages, but it does not certify the Vega runtime against Expo's React 19/TV native types. Vega still uses its own runtime and Metro aliases.
+
+Shared lint and tests use the Expo workspace's existing ESLint/Babel/Jest toolchain. The shared test command intentionally runs the common suite in `apps/expo-multi-tv/__tests__` with watch mode disabled. Plan tests cover all 600 valid goal/level/duration/equipment combinations. The planner repeats complete eligible circuits for longer sessions; repeated exercise IDs across circuits are intentional. Estimates include inter-set rest and 15-second transitions, and can finish short of the target when the next exercise would exceed the one-minute overshoot allowance.
+
+Metro remote configuration is loaded before navigation roots mount so both TV remotes and web keyboard focus can subscribe. Validate actual focus, drawer/Back navigation, video seeking and pause on Android TV after building. A successful Metro export verifies bundling, not native playback or device behavior.
+
+Expo SDK 54 is compatible with React 19.1 and React Native TV 0.81, but this checkout has older Expo module versions, react-native-web 0.19, a pre-release TV runtime and an SDK-51-era TV config plugin. Run `yarn.cmd workspace @multi-tv/expo-multi-tv exec expo install --check` before a coordinated native dependency alignment. Do not use `--fix` or clean prebuild automatically; preserve the native TV configuration and separate Vega dependencies.
+
+
 ### Project Structure
 
 The monorepo contains the following packages:

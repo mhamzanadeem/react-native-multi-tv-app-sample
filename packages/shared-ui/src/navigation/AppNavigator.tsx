@@ -1,6 +1,7 @@
 import React, { useEffect, StrictMode } from 'react';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import { Platform } from 'react-native';
+// Configure before navigation roots mount, including keyboard navigation on web.
+import '../app/configureRemoteControl';
 import { MenuProvider } from '../components/MenuContext';
 import { GoBackConfiguration } from '../app/remote-control/GoBackConfiguration';
 import RootNavigator from './RootNavigator';
@@ -11,17 +12,6 @@ export interface AppNavigatorProps {
 }
 
 export default function AppNavigator({ fontsLoaded = true, onReady }: AppNavigatorProps) {
-  useEffect(() => {
-    // Import remote control config for TV platforms
-    if (Platform.isTV) {
-      try {
-        require('../app/configureRemoteControl');
-      } catch (error) {
-        console.warn('Remote control configuration not available:', error);
-      }
-    }
-  }, []);
-
   useEffect(() => {
     if (fontsLoaded && onReady) {
       onReady();

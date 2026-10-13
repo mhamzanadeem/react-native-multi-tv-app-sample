@@ -1,3 +1,4 @@
+/// <reference path="../types/react-native-pixel-perfect.d.ts" />
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 

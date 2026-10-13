@@ -1,11 +1,14 @@
-const prettier = require('eslint-plugin-prettier');
+// Lint tooling is owned by the Expo workspace under workspace-limited hoisting.
+const { createRequire } = require('node:module');
+const requireExpo = createRequire(require('node:path').join(__dirname, 'apps/expo-multi-tv/package.json'));
+const prettier = requireExpo('eslint-plugin-prettier');
 
 module.exports = [
   {
     files: ['**/*.ts', '**/*.tsx'],
     ignores: ['node_modules/**', 'build/**', 'dist/**'],
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      parser: requireExpo('@typescript-eslint/parser'),
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
@@ -18,8 +21,8 @@ module.exports = [
       },
     },
     plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-      react: require('eslint-plugin-react'),
+      '@typescript-eslint': requireExpo('@typescript-eslint/eslint-plugin'),
+      react: requireExpo('eslint-plugin-react'),
       prettier: prettier,
     },
     rules: {

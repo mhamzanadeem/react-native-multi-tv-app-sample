@@ -64,11 +64,11 @@ export default function PlayerScreen() {
     const handleKeyDown = (key: SupportedKeys) => {
       switch (key) {
         case SupportedKeys.Right:
-        case SupportedKeys.Rewind:
+        case SupportedKeys.FastForward:
           seek(currentTimeRef.current + 10);
           break;
         case SupportedKeys.Left:
-        case SupportedKeys.FastForward:
+        case SupportedKeys.Rewind:
           seek(currentTimeRef.current - 10);
           break;
         case SupportedKeys.Back:

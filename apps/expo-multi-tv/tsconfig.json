@@ -1,13 +1,11 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": [
+    "expo/tsconfig.base",
+    "../../tsconfig.consumer.json"
+  ],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "strict": true,
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
+    "strict": true
   },
   "include": [
     "**/*.ts",

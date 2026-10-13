@@ -3922,12 +3922,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@multi-tv/shared-ui@workspace:packages/shared-ui"
   dependencies:
+    "@bam.tech/lrud": "npm:^8.0.2"
     "@types/react": "npm:~19.1.0"
+    mitt: "npm:3.0.1"
     typescript: "npm:~5.7.0"
   peerDependencies:
+    "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": "*"
+    "@react-navigation/native-stack": ^7.0.0
     react: "*"
     react-native: "*"
+    react-native-gesture-handler: "*"
+    react-native-keyevent: ^0.3.2
+    react-native-pixel-perfect: ^1.0.2
+    react-native-video: ^6.8.0
+    react-tv-space-navigation: ^5.2.0 || ^6.0.0-beta1
   languageName: unknown
   linkType: soft
 

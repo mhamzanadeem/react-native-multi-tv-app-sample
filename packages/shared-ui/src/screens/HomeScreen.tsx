@@ -156,7 +156,7 @@ export default function HomeScreen() {
   );
 
   const renderScrollableRow = useCallback(
-    (title: string, _ref: React.RefObject<SpatialNavigationVirtualizedListRef>) => {
+    (title: string, _ref: React.RefObject<SpatialNavigationVirtualizedListRef | null>) => {
       return (
         <View style={gridStyles.highlightsContainer}>
           <Text style={gridStyles.highlightsTitle}>{title}</Text>

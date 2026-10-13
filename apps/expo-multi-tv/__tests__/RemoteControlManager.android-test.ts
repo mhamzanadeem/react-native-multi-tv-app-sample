@@ -43,3 +43,21 @@ describe('RemoteControlManager.android', () => {
     expect(listener).toHaveBeenCalledWith(SupportedKeys.Enter);
   });
 });
+
+// Media keys must remain separate from D-pad focus navigation.
+describe('Android media and Back keys', () => {
+  it.each([
+    [67, SupportedKeys.Back],
+    [85, SupportedKeys.PlayPause], [89, SupportedKeys.Rewind],
+    [90, SupportedKeys.FastForward],
+  ])('maps key code %i to %s', (keyCode, expected) => {
+    const handler = jest.fn();
+    const token = RemoteControlManager.addKeydownListener(handler);
+    onKeyDown({ keyCode });
+    expect(handler).toHaveBeenCalledWith(expected);
+    RemoteControlManager.removeKeydownListener(token);
+    handler.mockClear();
+    onKeyDown({ keyCode });
+    expect(handler).not.toHaveBeenCalled();
+  });
+});

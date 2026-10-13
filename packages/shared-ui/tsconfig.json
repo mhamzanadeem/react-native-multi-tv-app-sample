@@ -1,11 +1,33 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": [
+    "../../tsconfig.base.json",
+    "../../tsconfig.consumer.json"
+  ],
   "compilerOptions": {
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "typeRoots": [
+      "../../apps/expo-multi-tv/node_modules/@types",
+      "./node_modules/@types"
+    ],
+    "types": [
+      "react",
+      "node"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

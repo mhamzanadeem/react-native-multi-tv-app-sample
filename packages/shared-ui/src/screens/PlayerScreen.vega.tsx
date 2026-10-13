@@ -186,7 +186,6 @@ export default function PlayerScreen() {
       videoHandlerRef.current?.destroyVideoElements();
       videoRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movie, headerImage, isFocused]);
 
   /**

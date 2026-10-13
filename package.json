@@ -17,6 +17,7 @@
   "scripts": {
     "dev": "yarn workspace @multi-tv/expo-multi-tv start",
     "dev:android": "yarn workspace @multi-tv/expo-multi-tv android",
+    "tv:start": "\"$SystemRoot/System32/WindowsPowerShell/v1.0/powershell.exe\" -NoLogo -NoProfile -ExecutionPolicy Bypass -File ./scripts/start-tv.ps1",
     "dev:ios": "yarn workspace @multi-tv/expo-multi-tv ios",
     "dev:web": "yarn workspace @multi-tv/expo-multi-tv web",
     "dev:vega": "yarn workspace @multi-tv/vega start",

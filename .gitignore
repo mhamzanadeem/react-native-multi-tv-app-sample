@@ -24,3 +24,21 @@ yarn-error.log
 .DS_Store
 
 
+
+# Local validation exports and logs
+.validation/
+
+# Yarn-generated install metadata (not the required yarn.lock)
+/.yarn/install-state.gz
+/.yarn/build-state.yml
+
+# Generated build/test metadata and machine-specific Android SDK paths
+.gradle/
+*.tsbuildinfo
+coverage/
+**/android/local.properties
+
+# Local environment values; retain documented templates
+.env
+.env.local
+.env.*.local
