@@ -223,7 +223,7 @@ const gridStyles = StyleSheet.create({
   },
   headerTitle: {
     color: colors.text,
-    fontSize: scaledPixels(56),
+    fontSize: scaledPixels(48),
     fontWeight: 'bold',
     marginBottom: scaledPixels(16),
     textShadowColor: 'rgba(0, 0, 0, 0.9)',
@@ -232,7 +232,7 @@ const gridStyles = StyleSheet.create({
   },
   headerDescription: {
     color: colors.text,
-    fontSize: scaledPixels(28),
+    fontSize: scaledPixels(24),
     fontWeight: '500',
     lineHeight: scaledPixels(40),
     textShadowColor: 'rgba(0, 0, 0, 0.9)',

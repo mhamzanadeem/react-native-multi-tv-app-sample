@@ -3,13 +3,15 @@
 
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Text } from 'react-native';
-import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
+import { DefaultFocus, SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { scaledPixels } from '../hooks/useScale';
 import { useMenuContext } from '../components/MenuContext';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { Direction } from '@bam.tech/lrud';
 import { safeZones } from '../theme';
+import FocusablePressable from '../components/FocusablePressable';
+import { fitnessColors as colors } from '../theme/fitness';
 import { getOpenDrawerDirection } from '../utils/rtl';
 
 export default function TVScreen() {
@@ -33,11 +35,13 @@ export default function TVScreen() {
   return (
     <SpatialNavigationRoot isActive={isActive} onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
       <View style={styles.container}>
-        <DefaultFocus>
-          <SpatialNavigationFocusableView>
-            <Text style={styles.title}>TV Screen</Text>
-          </SpatialNavigationFocusableView>
-        </DefaultFocus>
+        <View style={{ backgroundColor: colors.card, padding: scaledPixels(32), borderRadius: scaledPixels(20), maxWidth: '100%', borderWidth: scaledPixels(2), borderColor: colors.border }}>
+          <Text accessibilityRole="header" style={styles.title}>TV</Text>
+          <Text style={{ color: colors.textSecondary, fontSize: scaledPixels(24), lineHeight: scaledPixels(36), marginBottom: scaledPixels(24) }}>No live channels are configured. Open Menu to browse the available media sample or start a workout.</Text>
+          <DefaultFocus>
+            <FocusablePressable text="Open Menu" onSelect={() => { navigation.dispatch(DrawerActions.openDrawer()); toggleMenu(true); }} />
+          </DefaultFocus>
+        </View>
       </View>
     </SpatialNavigationRoot>
   );
@@ -46,7 +50,7 @@ export default function TVScreen() {
 const tvStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: colors.background,
       justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),

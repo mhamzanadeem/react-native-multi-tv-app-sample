@@ -1,6 +1,7 @@
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, type ScrollView } from 'react-native';
 import {
   SpatialNavigationRoot,
+  SpatialNavigationView,
   SpatialNavigationNode,
   SpatialNavigationScrollView,
   DefaultFocus,
@@ -8,13 +9,16 @@ import {
 import { DrawerActions, useIsFocused, useNavigation } from '@react-navigation/native';
 import { Direction } from '@bam.tech/lrud';
 import { scaledPixels } from '../hooks/useScale';
-import { colors, safeZones } from '../theme';
+import { safeZones } from '../theme';
+import { fitnessColors as colors } from '../theme/fitness';
+import FitnessSidebar from '../components/fitness/FitnessSidebar';
 import FocusablePressable from '../components/FocusablePressable';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useMenuContext } from '../components/MenuContext';
 import { getOpenDrawerDirection } from '../utils/rtl';
 
 export default function SettingsScreen() {
+  const scrollRef = useRef<ScrollView>(null);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
@@ -26,6 +30,7 @@ export default function SettingsScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
+      if (movement === 'up') scrollRef.current?.scrollTo({ y: 0, animated: true });
       if (movement === getOpenDrawerDirection()) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
@@ -37,28 +42,25 @@ export default function SettingsScreen() {
   return (
     <SpatialNavigationRoot
       isActive={isFocused && !isMenuOpen}
-      onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}
-    >
-      <View style={styles.container}>
-        <View style={styles.innerContainer}>
+      onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
+      <SpatialNavigationView direction="horizontal" style={styles.container}>
+        <FitnessSidebar title="Settings" />
+        <SpatialNavigationView direction="vertical" style={styles.innerContainer}>
           <Text style={styles.title}>Settings</Text>
-          <SpatialNavigationScrollView style={styles.scrollView}>
+          <SpatialNavigationScrollView ref={scrollRef} style={styles.scrollView}>
             <View style={styles.scrollContent}>
               {/* Video Quality Section */}
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Video Quality</Text>
                 <SpatialNavigationNode orientation="horizontal">
                   <View style={styles.optionsRow}>
-                    {qualityOptions.map((quality, index) => (
+                    {qualityOptions.map((quality, index) =>
                       index === 0 ? (
                         <DefaultFocus key={quality}>
                           <FocusablePressable
                             text={quality}
                             onSelect={() => setSelectedQuality(quality)}
-                            style={[
-                              styles.optionButton,
-                              selectedQuality === quality && styles.selectedOption,
-                            ]}
+                            style={[styles.optionButton, selectedQuality === quality && styles.selectedOption]}
                           />
                         </DefaultFocus>
                       ) : (
@@ -66,13 +68,10 @@ export default function SettingsScreen() {
                           key={quality}
                           text={quality}
                           onSelect={() => setSelectedQuality(quality)}
-                          style={[
-                            styles.optionButton,
-                            selectedQuality === quality && styles.selectedOption,
-                          ]}
+                          style={[styles.optionButton, selectedQuality === quality && styles.selectedOption]}
                         />
-                      )
-                    ))}
+                      ),
+                    )}
                   </View>
                 </SpatialNavigationNode>
               </View>
@@ -116,12 +115,14 @@ export default function SettingsScreen() {
                 <SpatialNavigationNode orientation="vertical">
                   <View style={styles.optionsColumn}>
                     <FocusablePressable
-                      text="Clear Cache"
+                      text="Clear Cache (unavailable)"
+                      disabled
                       onSelect={() => console.log('Clear cache')}
                       style={styles.actionButton}
                     />
                     <FocusablePressable
-                      text="Sign Out"
+                      text="Sign Out (guest mode)"
+                      disabled
                       onSelect={() => console.log('Sign out')}
                       style={styles.actionButton}
                     />
@@ -130,16 +131,17 @@ export default function SettingsScreen() {
               </View>
             </View>
           </SpatialNavigationScrollView>
-        </View>
-      </View>
+        </SpatialNavigationView>
+      </SpatialNavigationView>
     </SpatialNavigationRoot>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'black',
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: colors.background,
     zIndex: 100,
   },
   headerContainer: {
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: colors.background,
     paddingTop: scaledPixels(20),
   },
   scrollView: {
@@ -187,10 +189,15 @@ const styles = StyleSheet.create({
     marginBottom: scaledPixels(32),
   },
   section: {
-    marginBottom: scaledPixels(40),
+    marginBottom: scaledPixels(24),
+    padding: scaledPixels(28),
+    backgroundColor: colors.card,
+    borderRadius: scaledPixels(20),
+    borderWidth: scaledPixels(2),
+    borderColor: colors.border,
   },
   sectionTitle: {
-    fontSize: scaledPixels(28),
+    fontSize: scaledPixels(24),
     fontWeight: '600',
     color: colors.text,
     marginBottom: scaledPixels(20),

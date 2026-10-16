@@ -153,7 +153,7 @@ const detailsStyles = StyleSheet.create({
       paddingBottom: scaledPixels(20),
     },
     title: {
-      fontSize: scaledPixels(64),
+      fontSize: scaledPixels(48),
       fontWeight: 'bold',
       color: colors.text,
       marginBottom: scaledPixels(24),
@@ -162,7 +162,7 @@ const detailsStyles = StyleSheet.create({
       textShadowRadius: 12,
     },
     description: {
-      fontSize: scaledPixels(28),
+      fontSize: scaledPixels(24),
       color: colors.text,
       marginBottom: scaledPixels(32),
       width: '65%',
@@ -223,7 +223,7 @@ const detailsStyles = StyleSheet.create({
       textShadowRadius: 4,
     },
     crewName: {
-      fontSize: scaledPixels(28),
+      fontSize: scaledPixels(24),
       color: colors.text,
       fontWeight: 'bold',
       textShadowColor: 'rgba(0, 0, 0, 0.8)',

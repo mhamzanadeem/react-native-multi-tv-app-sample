@@ -1,12 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Text } from 'react-native';
-import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
+import { DefaultFocus, SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { scaledPixels } from '../hooks/useScale';
 import { useMenuContext } from '../components/MenuContext';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { Direction } from '@bam.tech/lrud';
 import { useCallback, useState } from 'react';
 import { safeZones } from '../theme';
+import FocusablePressable from '../components/FocusablePressable';
+import { fitnessColors as colors } from '../theme/fitness';
 import { getOpenDrawerDirection } from '../utils/rtl';
 
 export default function ExploreScreen() {
@@ -30,11 +32,13 @@ export default function ExploreScreen() {
   return (
     <SpatialNavigationRoot isActive={isActive} onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
       <View style={styles.container}>
-        <DefaultFocus>
-          <SpatialNavigationFocusableView>
-            <Text style={styles.title}>Explore Screen</Text>
-          </SpatialNavigationFocusableView>
-        </DefaultFocus>
+        <View style={{ backgroundColor: colors.card, padding: scaledPixels(32), borderRadius: scaledPixels(20), maxWidth: '100%', borderWidth: scaledPixels(2), borderColor: colors.border }}>
+          <Text accessibilityRole="header" style={styles.title}>Explore</Text>
+          <Text style={{ color: colors.textSecondary, fontSize: scaledPixels(24), lineHeight: scaledPixels(36), marginBottom: scaledPixels(24) }}>There is no extra content here yet. Open Menu to browse workouts or the media sample.</Text>
+          <DefaultFocus>
+            <FocusablePressable text="Open Menu" onSelect={() => { navigation.dispatch(DrawerActions.openDrawer()); toggleMenu(true); }} />
+          </DefaultFocus>
+        </View>
       </View>
     </SpatialNavigationRoot>
   );
@@ -43,7 +47,7 @@ export default function ExploreScreen() {
 const exploreStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: colors.background,
       paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
       paddingVertical: scaledPixels(safeZones.titleSafe.vertical),
     },
