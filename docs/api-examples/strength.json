@@ -1,0 +1,506 @@
+{
+  "operation": "generate",
+  "request": {
+    "goal": "strength",
+    "fitnessLevel": "intermediate",
+    "durationMinutes": 30,
+    "equipment": [
+      "dumbbells"
+    ],
+    "lowImpact": true,
+    "requestId": "demo-001"
+  },
+  "httpStatus": 200,
+  "response": {
+    "requestId": "demo-001",
+    "status": "success",
+    "planId": "mock-demo-001",
+    "plan": {
+      "id": "mock-demo-001",
+      "title": "Build your strength",
+      "goal": "strength",
+      "fitnessLevel": "intermediate",
+      "targetDurationMinutes": 30,
+      "estimatedDurationSeconds": 1857,
+      "exercises": [
+        {
+          "exercise": {
+            "id": "march-in-place",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Stand tall with relaxed shoulders.",
+              "Land softly and keep a comfortable pace."
+            ],
+            "modification": "Hold a stable support if needed.",
+            "lowImpact": true,
+            "order": 0,
+            "name": "March in Place",
+            "description": "March comfortably while standing tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "bodyweight-reverse-lunge",
+            "category": "strength",
+            "muscles": [
+              "legs",
+              "glutes"
+            ],
+            "techniqueCues": [
+              "Step back slowly.",
+              "Keep your front knee aligned with your toes."
+            ],
+            "modification": "Use a stable support and a shorter step.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Supported Reverse Lunge",
+            "description": "Step backward gently while using a stable support if needed.",
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "intermediate",
+            "equipment": [],
+            "sets": 2,
+            "reps": 8,
+            "restSeconds": 35
+          },
+          "sets": 2,
+          "reps": 8,
+          "restSeconds": 35,
+          "estimatedSeconds": 99
+        },
+        {
+          "exercise": {
+            "id": "bodyweight-squat",
+            "category": "strength",
+            "muscles": [
+              "legs",
+              "glutes"
+            ],
+            "techniqueCues": [
+              "Keep your knees aligned with your toes.",
+              "Use a comfortable depth and controlled movement."
+            ],
+            "modification": "Sit back toward a stable chair for support.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Bodyweight Squat",
+            "description": "Lower your hips comfortably, then stand tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 10,
+            "restSeconds": 30
+          },
+          "sets": 2,
+          "reps": 10,
+          "restSeconds": 30,
+          "estimatedSeconds": 110
+        },
+        {
+          "exercise": {
+            "id": "dumbbell-curl",
+            "name": "Dumbbell Curl",
+            "description": "Curl light dumbbells with controlled movement.",
+            "category": "strength",
+            "muscles": [
+              "arms"
+            ],
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [
+              "dumbbells"
+            ],
+            "sets": 2,
+            "durationSeconds": 35,
+            "restSeconds": 30,
+            "order": 2,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your elbows close to your sides.",
+              "Avoid swinging the weights."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 35,
+          "restSeconds": 30,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "dumbbell-row",
+            "category": "strength",
+            "muscles": [
+              "back",
+              "arms"
+            ],
+            "techniqueCues": [
+              "Keep a neutral back.",
+              "Draw your elbows toward your hips."
+            ],
+            "modification": "Use lighter weights and support your free hand.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Dumbbell Row",
+            "description": "Use light dumbbells and keep your back comfortably neutral.",
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "intermediate",
+            "equipment": [
+              "dumbbells"
+            ],
+            "sets": 3,
+            "reps": 10,
+            "restSeconds": 45
+          },
+          "sets": 3,
+          "reps": 10,
+          "restSeconds": 45,
+          "estimatedSeconds": 210
+        },
+        {
+          "exercise": {
+            "id": "dumbbell-shoulder-press",
+            "category": "strength",
+            "muscles": [
+              "shoulders",
+              "arms"
+            ],
+            "techniqueCues": [
+              "Keep your ribs relaxed.",
+              "Press only through a comfortable range."
+            ],
+            "modification": "Use lighter weights or reduce the range.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Dumbbell Shoulder Press",
+            "description": "Press light dumbbells overhead only within a comfortable range.",
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "intermediate",
+            "equipment": [
+              "dumbbells"
+            ],
+            "sets": 2,
+            "reps": 8,
+            "restSeconds": 45
+          },
+          "sets": 2,
+          "reps": 8,
+          "restSeconds": 45,
+          "estimatedSeconds": 109
+        },
+        {
+          "exercise": {
+            "id": "hip-hinge",
+            "name": "Bodyweight Hip Hinge",
+            "description": "Move your hips back with a soft bend in the knees.",
+            "category": "strength",
+            "muscles": [
+              "glutes",
+              "hamstrings"
+            ],
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 25,
+            "order": 2,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your back neutral.",
+              "Return to standing with control."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 25,
+          "estimatedSeconds": 105
+        },
+        {
+          "exercise": {
+            "id": "standing-calf-raise",
+            "category": "strength",
+            "muscles": [
+              "calves"
+            ],
+            "techniqueCues": [
+              "Rise slowly and lower with control.",
+              "Keep your ankles aligned."
+            ],
+            "modification": "Use a wall or stable chair for balance.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Standing Calf Raise",
+            "description": "Rise onto your toes and lower slowly.",
+            "goals": [
+              "general-fitness",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 12,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "reps": 12,
+          "restSeconds": 20,
+          "estimatedSeconds": 116
+        },
+        {
+          "exercise": {
+            "id": "wall-push-up",
+            "category": "strength",
+            "muscles": [
+              "chest",
+              "arms"
+            ],
+            "techniqueCues": [
+              "Keep your body in a straight line.",
+              "Bend your elbows gently, then press away."
+            ],
+            "modification": "Stand closer to the wall to reduce difficulty.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Wall Push-Up",
+            "description": "Place your hands on a wall and bend your elbows slowly.",
+            "goals": [
+              "general-fitness",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 8,
+            "restSeconds": 30
+          },
+          "sets": 2,
+          "reps": 8,
+          "restSeconds": 30,
+          "estimatedSeconds": 94
+        },
+        {
+          "exercise": {
+            "id": "march-in-place",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Stand tall with relaxed shoulders.",
+              "Land softly and keep a comfortable pace."
+            ],
+            "modification": "Hold a stable support if needed.",
+            "lowImpact": true,
+            "order": 0,
+            "name": "March in Place",
+            "description": "March comfortably while standing tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "bodyweight-reverse-lunge",
+            "category": "strength",
+            "muscles": [
+              "legs",
+              "glutes"
+            ],
+            "techniqueCues": [
+              "Step back slowly.",
+              "Keep your front knee aligned with your toes."
+            ],
+            "modification": "Use a stable support and a shorter step.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Supported Reverse Lunge",
+            "description": "Step backward gently while using a stable support if needed.",
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "intermediate",
+            "equipment": [],
+            "sets": 2,
+            "reps": 8,
+            "restSeconds": 35
+          },
+          "sets": 2,
+          "reps": 8,
+          "restSeconds": 35,
+          "estimatedSeconds": 99
+        },
+        {
+          "exercise": {
+            "id": "bodyweight-squat",
+            "category": "strength",
+            "muscles": [
+              "legs",
+              "glutes"
+            ],
+            "techniqueCues": [
+              "Keep your knees aligned with your toes.",
+              "Use a comfortable depth and controlled movement."
+            ],
+            "modification": "Sit back toward a stable chair for support.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Bodyweight Squat",
+            "description": "Lower your hips comfortably, then stand tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 10,
+            "restSeconds": 30
+          },
+          "sets": 2,
+          "reps": 10,
+          "restSeconds": 30,
+          "estimatedSeconds": 110
+        },
+        {
+          "exercise": {
+            "id": "dumbbell-curl",
+            "name": "Dumbbell Curl",
+            "description": "Curl light dumbbells with controlled movement.",
+            "category": "strength",
+            "muscles": [
+              "arms"
+            ],
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [
+              "dumbbells"
+            ],
+            "sets": 2,
+            "durationSeconds": 35,
+            "restSeconds": 30,
+            "order": 2,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your elbows close to your sides.",
+              "Avoid swinging the weights."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 35,
+          "restSeconds": 30,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "dumbbell-row",
+            "category": "strength",
+            "muscles": [
+              "back",
+              "arms"
+            ],
+            "techniqueCues": [
+              "Keep a neutral back.",
+              "Draw your elbows toward your hips."
+            ],
+            "modification": "Use lighter weights and support your free hand.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Dumbbell Row",
+            "description": "Use light dumbbells and keep your back comfortably neutral.",
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "intermediate",
+            "equipment": [
+              "dumbbells"
+            ],
+            "sets": 3,
+            "reps": 10,
+            "restSeconds": 45
+          },
+          "sets": 3,
+          "reps": 10,
+          "restSeconds": 45,
+          "estimatedSeconds": 210
+        }
+      ],
+      "createdAt": "2026-10-14T04:58:42.216Z",
+      "config": {
+        "goal": "strength",
+        "fitnessLevel": "intermediate",
+        "durationMinutes": 30,
+        "equipment": [
+          "dumbbells"
+        ],
+        "lowImpact": true
+      }
+    },
+    "notes": [
+      "Locally simulated plan; no AWS or AI request.",
+      "Use controlled movement; stop if uncomfortable."
+    ]
+  }
+}

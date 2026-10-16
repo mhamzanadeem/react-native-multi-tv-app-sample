@@ -1,0 +1,399 @@
+{
+  "operation": "generate",
+  "request": {
+    "goal": "general-fitness",
+    "fitnessLevel": "beginner",
+    "durationMinutes": 20,
+    "equipment": [],
+    "lowImpact": true,
+    "requestId": "demo-001"
+  },
+  "httpStatus": 200,
+  "response": {
+    "requestId": "demo-001",
+    "status": "success",
+    "planId": "mock-demo-001",
+    "plan": {
+      "id": "mock-demo-001",
+      "title": "Everyday full body",
+      "goal": "general-fitness",
+      "fitnessLevel": "beginner",
+      "targetDurationMinutes": 20,
+      "estimatedDurationSeconds": 1165,
+      "exercises": [
+        {
+          "exercise": {
+            "id": "march-in-place",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Stand tall with relaxed shoulders.",
+              "Land softly and keep a comfortable pace."
+            ],
+            "modification": "Hold a stable support if needed.",
+            "lowImpact": true,
+            "order": 0,
+            "name": "March in Place",
+            "description": "March comfortably while standing tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "bodyweight-squat",
+            "category": "strength",
+            "muscles": [
+              "legs",
+              "glutes"
+            ],
+            "techniqueCues": [
+              "Keep your knees aligned with your toes.",
+              "Use a comfortable depth and controlled movement."
+            ],
+            "modification": "Sit back toward a stable chair for support.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Bodyweight Squat",
+            "description": "Lower your hips comfortably, then stand tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 10,
+            "restSeconds": 30
+          },
+          "sets": 2,
+          "reps": 10,
+          "restSeconds": 30,
+          "estimatedSeconds": 110
+        },
+        {
+          "exercise": {
+            "id": "heel-dig",
+            "name": "Alternating Heel Digs",
+            "description": "Tap one heel forward at a time.",
+            "category": "cardio",
+            "muscles": [
+              "legs"
+            ],
+            "goals": [
+              "cardio",
+              "endurance",
+              "weight-management",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20,
+            "order": 1,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your toes lifted gently.",
+              "Stay tall and breathe steadily."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "wall-push-up",
+            "category": "strength",
+            "muscles": [
+              "chest",
+              "arms"
+            ],
+            "techniqueCues": [
+              "Keep your body in a straight line.",
+              "Bend your elbows gently, then press away."
+            ],
+            "modification": "Stand closer to the wall to reduce difficulty.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Wall Push-Up",
+            "description": "Place your hands on a wall and bend your elbows slowly.",
+            "goals": [
+              "general-fitness",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 8,
+            "restSeconds": 30
+          },
+          "sets": 2,
+          "reps": 8,
+          "restSeconds": 30,
+          "estimatedSeconds": 94
+        },
+        {
+          "exercise": {
+            "id": "ankle-circles",
+            "name": "Supported Ankle Circles",
+            "description": "Gently circle one ankle at a time.",
+            "category": "mobility",
+            "muscles": [
+              "ankles"
+            ],
+            "goals": [
+              "mobility",
+              "flexibility",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 30,
+            "restSeconds": 15,
+            "order": 0,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Hold a stable support.",
+              "Make small controlled circles and switch sides."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 30,
+          "restSeconds": 15,
+          "estimatedSeconds": 75
+        },
+        {
+          "exercise": {
+            "id": "hip-hinge",
+            "name": "Bodyweight Hip Hinge",
+            "description": "Move your hips back with a soft bend in the knees.",
+            "category": "strength",
+            "muscles": [
+              "glutes",
+              "hamstrings"
+            ],
+            "goals": [
+              "strength",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 25,
+            "order": 2,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your back neutral.",
+              "Return to standing with control."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 25,
+          "estimatedSeconds": 105
+        },
+        {
+          "exercise": {
+            "id": "standing-knee-raise",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Keep your torso upright.",
+              "Lift each knee only as high as comfortable."
+            ],
+            "modification": "Keep one hand near a stable support.",
+            "lowImpact": true,
+            "order": 1,
+            "name": "Standing Knee Raise",
+            "description": "Raise one knee at a time while maintaining your balance.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 30,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 30,
+          "restSeconds": 20,
+          "estimatedSeconds": 80
+        },
+        {
+          "exercise": {
+            "id": "standing-calf-raise",
+            "category": "strength",
+            "muscles": [
+              "calves"
+            ],
+            "techniqueCues": [
+              "Rise slowly and lower with control.",
+              "Keep your ankles aligned."
+            ],
+            "modification": "Use a wall or stable chair for balance.",
+            "lowImpact": true,
+            "order": 2,
+            "name": "Standing Calf Raise",
+            "description": "Rise onto your toes and lower slowly.",
+            "goals": [
+              "general-fitness",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "reps": 12,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "reps": 12,
+          "restSeconds": 20,
+          "estimatedSeconds": 116
+        },
+        {
+          "exercise": {
+            "id": "standing-shoulder-roll",
+            "category": "mobility",
+            "muscles": [
+              "shoulders",
+              "upper back"
+            ],
+            "techniqueCues": [
+              "Breathe steadily.",
+              "Use slow circles without forcing the range."
+            ],
+            "modification": "Keep the circles small.",
+            "lowImpact": true,
+            "order": 0,
+            "name": "Standing Shoulder Rolls",
+            "description": "Roll your shoulders slowly in a comfortable range.",
+            "goals": [
+              "general-fitness",
+              "mobility"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 30,
+            "restSeconds": 15
+          },
+          "sets": 2,
+          "durationSeconds": 30,
+          "restSeconds": 15,
+          "estimatedSeconds": 75
+        },
+        {
+          "exercise": {
+            "id": "standing-punch",
+            "name": "Gentle Standing Punches",
+            "description": "Reach forward with alternating arms.",
+            "category": "cardio",
+            "muscles": [
+              "shoulders",
+              "core"
+            ],
+            "goals": [
+              "cardio",
+              "endurance",
+              "weight-management",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20,
+            "order": 1,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your knees soft.",
+              "Avoid locking your elbows."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "standing-balance",
+            "category": "mobility",
+            "muscles": [
+              "ankles",
+              "core"
+            ],
+            "techniqueCues": [
+              "Look at a steady point ahead.",
+              "Keep a stable support within reach."
+            ],
+            "modification": "Keep your toes on the floor for extra support.",
+            "lowImpact": true,
+            "order": 3,
+            "name": "Supported Single-Leg Balance",
+            "description": "Stand near a stable support and balance briefly on each leg.",
+            "goals": [
+              "mobility",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 20,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 20,
+          "restSeconds": 20,
+          "estimatedSeconds": 60
+        }
+      ],
+      "createdAt": "2026-10-14T04:58:42.213Z",
+      "config": {
+        "goal": "general-fitness",
+        "fitnessLevel": "beginner",
+        "durationMinutes": 20,
+        "equipment": [],
+        "lowImpact": true
+      }
+    },
+    "notes": [
+      "Locally simulated plan; no AWS or AI request.",
+      "Use controlled movement; stop if uncomfortable."
+    ]
+  }
+}

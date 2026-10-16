@@ -1,0 +1,19 @@
+{
+  "operation": "generate",
+  "request": {
+    "goal": "general-fitness",
+    "fitnessLevel": "beginner",
+    "durationMinutes": 20,
+    "equipment": [],
+    "lowImpact": true,
+    "requestId": "demo-001"
+  },
+  "httpStatus": 500,
+  "response": {
+    "requestId": "demo-001",
+    "error": {
+      "code": "SERVER_ERROR",
+      "message": "Simulated backend failure."
+    }
+  }
+}

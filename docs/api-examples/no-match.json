@@ -1,0 +1,19 @@
+{
+  "operation": "generate",
+  "request": {
+    "goal": "general-fitness",
+    "fitnessLevel": "beginner",
+    "durationMinutes": 20,
+    "equipment": [],
+    "lowImpact": true,
+    "requestId": "demo-001"
+  },
+  "httpStatus": 422,
+  "response": {
+    "requestId": "demo-001",
+    "error": {
+      "code": "NO_MATCHING_PLAN",
+      "message": "Simulated catalogue availability failure; choose another configuration."
+    }
+  }
+}

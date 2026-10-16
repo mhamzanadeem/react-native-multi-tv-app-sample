@@ -1,0 +1,27 @@
+{
+  "operation": "history",
+  "request": {
+    "requestId": "demo-001"
+  },
+  "httpStatus": 200,
+  "response": {
+    "requestId": "demo-001",
+    "status": "success",
+    "sessions": [
+      {
+        "id": "sample-session-001",
+        "planId": "sample-plan-001",
+        "title": "Sample general fitness workout",
+        "goal": "general-fitness",
+        "fitnessLevel": "beginner",
+        "exerciseCount": 4,
+        "completedExercises": 3,
+        "skippedExercises": 1,
+        "activeSeconds": 480,
+        "startedAt": "2026-10-01T10:00:00.000Z",
+        "completedAt": "2026-10-01T10:10:00.000Z"
+      }
+    ],
+    "sampleData": true
+  }
+}

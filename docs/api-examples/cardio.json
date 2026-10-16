@@ -1,0 +1,244 @@
+{
+  "operation": "generate",
+  "request": {
+    "goal": "cardio",
+    "fitnessLevel": "beginner",
+    "durationMinutes": 10,
+    "equipment": [],
+    "lowImpact": true,
+    "requestId": "demo-001"
+  },
+  "httpStatus": 200,
+  "response": {
+    "requestId": "demo-001",
+    "status": "success",
+    "planId": "mock-demo-001",
+    "plan": {
+      "id": "mock-demo-001",
+      "title": "Move with energy",
+      "goal": "cardio",
+      "fitnessLevel": "beginner",
+      "targetDurationMinutes": 10,
+      "estimatedDurationSeconds": 655,
+      "exercises": [
+        {
+          "exercise": {
+            "id": "march-in-place",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Stand tall with relaxed shoulders.",
+              "Land softly and keep a comfortable pace."
+            ],
+            "modification": "Hold a stable support if needed.",
+            "lowImpact": true,
+            "order": 0,
+            "name": "March in Place",
+            "description": "March comfortably while standing tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "heel-dig",
+            "name": "Alternating Heel Digs",
+            "description": "Tap one heel forward at a time.",
+            "category": "cardio",
+            "muscles": [
+              "legs"
+            ],
+            "goals": [
+              "cardio",
+              "endurance",
+              "weight-management",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20,
+            "order": 1,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your toes lifted gently.",
+              "Stay tall and breathe steadily."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "standing-knee-raise",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Keep your torso upright.",
+              "Lift each knee only as high as comfortable."
+            ],
+            "modification": "Keep one hand near a stable support.",
+            "lowImpact": true,
+            "order": 1,
+            "name": "Standing Knee Raise",
+            "description": "Raise one knee at a time while maintaining your balance.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 30,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 30,
+          "restSeconds": 20,
+          "estimatedSeconds": 80
+        },
+        {
+          "exercise": {
+            "id": "standing-punch",
+            "name": "Gentle Standing Punches",
+            "description": "Reach forward with alternating arms.",
+            "category": "cardio",
+            "muscles": [
+              "shoulders",
+              "core"
+            ],
+            "goals": [
+              "cardio",
+              "endurance",
+              "weight-management",
+              "general-fitness"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20,
+            "order": 1,
+            "lowImpact": true,
+            "techniqueCues": [
+              "Keep your knees soft.",
+              "Avoid locking your elbows."
+            ],
+            "modification": "Use a smaller range or slower pace as needed."
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "standing-side-step",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "hips"
+            ],
+            "techniqueCues": [
+              "Keep your steps soft and controlled.",
+              "Keep your knees gently bent."
+            ],
+            "modification": "Take smaller steps to reduce the range.",
+            "lowImpact": true,
+            "order": 1,
+            "name": "Standing Side Steps",
+            "description": "Step gently from side to side at a comfortable pace.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        },
+        {
+          "exercise": {
+            "id": "march-in-place",
+            "category": "cardio",
+            "muscles": [
+              "legs",
+              "core"
+            ],
+            "techniqueCues": [
+              "Stand tall with relaxed shoulders.",
+              "Land softly and keep a comfortable pace."
+            ],
+            "modification": "Hold a stable support if needed.",
+            "lowImpact": true,
+            "order": 0,
+            "name": "March in Place",
+            "description": "March comfortably while standing tall.",
+            "goals": [
+              "general-fitness",
+              "weight-management",
+              "endurance",
+              "cardio",
+              "strength"
+            ],
+            "level": "beginner",
+            "equipment": [],
+            "sets": 2,
+            "durationSeconds": 40,
+            "restSeconds": 20
+          },
+          "sets": 2,
+          "durationSeconds": 40,
+          "restSeconds": 20,
+          "estimatedSeconds": 100
+        }
+      ],
+      "createdAt": "2026-10-14T04:58:42.217Z",
+      "config": {
+        "goal": "cardio",
+        "fitnessLevel": "beginner",
+        "durationMinutes": 10,
+        "equipment": [],
+        "lowImpact": true
+      }
+    },
+    "notes": [
+      "Locally simulated plan; no AWS or AI request.",
+      "Use controlled movement; stop if uncomfortable."
+    ]
+  }
+}

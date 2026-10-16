@@ -1,0 +1,18 @@
+{
+  "operation": "getPreferences",
+  "request": {
+    "requestId": "demo-001"
+  },
+  "httpStatus": 200,
+  "response": {
+    "requestId": "demo-001",
+    "status": "success",
+    "preferences": {
+      "goal": "general-fitness",
+      "fitnessLevel": "beginner",
+      "durationMinutes": 20,
+      "equipment": [],
+      "lowImpact": true
+    }
+  }
+}
