@@ -4,6 +4,7 @@ import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import '../app/configureRemoteControl';
 import { MenuProvider } from '../components/MenuContext';
 import { GoBackConfiguration } from '../app/remote-control/GoBackConfiguration';
+import { FormFitProvider } from '../hooks/FormFitContext';
 import RootNavigator from './RootNavigator';
 
 export interface AppNavigatorProps {
@@ -25,9 +26,11 @@ export default function AppNavigator({ fontsLoaded = true, onReady }: AppNavigat
   return (
     <StrictMode>
       <NavigationContainer theme={DarkTheme}>
-        <MenuProvider>
-          <GoBackConfiguration />
-          <RootNavigator />
+        <MenuProvider initiallyOpen={false}>
+          <FormFitProvider>
+            <GoBackConfiguration />
+            <RootNavigator />
+          </FormFitProvider>
         </MenuProvider>
       </NavigationContainer>
     </StrictMode>

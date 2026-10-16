@@ -1,5 +1,11 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
+import type { WorkoutGoal } from '../types/workout';
 export type RootStackParamList = {
-  DrawerNavigator: undefined;
+  DrawerNavigator: NavigatorScreenParams<DrawerParamList> | undefined;
+  WorkoutSetup: { goal?: WorkoutGoal } | undefined;
+  WorkoutPlan: { planId: string };
+  WorkoutSession: { planId: string };
+  WorkoutComplete: { summaryId: string };
   Details: {
     title: string;
     description: string;
@@ -21,6 +27,10 @@ export type RootStackParamList = {
 
 export type DrawerParamList = {
   Home: undefined;
+  Workouts: undefined;
+  Progress: undefined;
+  AwsDemo: undefined;
+  Media: undefined;
   Explore: undefined;
   TV: undefined;
   Settings: undefined;
