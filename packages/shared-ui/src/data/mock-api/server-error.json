@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "error": {
+    "code": "SERVER_ERROR",
+    "message": "Simulated backend failure."
+  }
+}

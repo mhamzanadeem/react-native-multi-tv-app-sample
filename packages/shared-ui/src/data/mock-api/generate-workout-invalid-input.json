@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "error": {
+    "code": "INVALID_WORKOUT_CONFIGURATION",
+    "message": "Use a supported goal, level, duration and equipment selection."
+  }
+}

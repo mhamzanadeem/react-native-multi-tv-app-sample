@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "error": {
+    "code": "NO_MATCHING_PLAN",
+    "message": "Simulated catalogue availability failure; choose another configuration."
+  }
+}

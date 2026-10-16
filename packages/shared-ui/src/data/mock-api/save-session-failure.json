@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "error": {
+    "code": "SERVER_ERROR",
+    "message": "Simulated save failure; no record was saved."
+  }
+}

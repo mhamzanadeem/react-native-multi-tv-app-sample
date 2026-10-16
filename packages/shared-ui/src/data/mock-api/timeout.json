@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "error": {
+    "code": "TIMEOUT",
+    "message": "Simulated timeout; no network was contacted."
+  }
+}

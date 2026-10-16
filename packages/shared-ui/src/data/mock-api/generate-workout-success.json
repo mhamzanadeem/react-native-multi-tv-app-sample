@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "status": "success",
+  "planId": "derived",
+  "plan": null,
+  "notes": ["Locally simulated plan; no AWS or AI request.", "Use controlled movement; stop if uncomfortable."]
+}

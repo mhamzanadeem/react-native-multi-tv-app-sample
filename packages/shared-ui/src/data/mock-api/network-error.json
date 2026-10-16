@@ -1,0 +1,7 @@
+{
+  "requestId": "derived",
+  "error": {
+    "code": "NETWORK_ERROR",
+    "message": "Simulated connection failure; no network was contacted."
+  }
+}

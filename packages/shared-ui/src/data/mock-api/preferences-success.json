@@ -1,0 +1,11 @@
+{
+  "requestId": "derived",
+  "status": "success",
+  "preferences": {
+    "goal": "general-fitness",
+    "fitnessLevel": "beginner",
+    "durationMinutes": 20,
+    "equipment": [],
+    "lowImpact": true
+  }
+}
