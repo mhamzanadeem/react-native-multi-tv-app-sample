@@ -7,15 +7,15 @@
       [
         "@react-native-tvos/config-tv",
         {
-          "androidTVBanner": "./assets/tv_icons/icon-400x240.png",
+          "androidTVBanner": "./assets/branding/tv-400x240.png",
           "appleTVImages": {
-            "icon": "./assets/tv_icons/icon-1280x768.png",
-            "iconSmall": "./assets/tv_icons/icon-400x240.png",
-            "iconSmall2x": "./assets/tv_icons/icon-800x480.png",
-            "topShelf": "./assets/tv_icons/icon-1920x720.png",
-            "topShelf2x": "./assets/tv_icons/icon-1920x720.png",
-            "topShelfWide": "./assets/tv_icons/icon-1920x720.png",
-            "topShelfWide2x": "./assets/tv_icons/icon-1920x720.png"
+            "icon": "./assets/branding/tv-1280x768.png",
+            "iconSmall": "./assets/branding/tv-400x240.png",
+            "iconSmall2x": "./assets/branding/tv-800x480.png",
+            "topShelf": "./assets/branding/tv-1920x720.png",
+            "topShelf2x": "./assets/branding/tv-1920x720.png",
+            "topShelfWide": "./assets/branding/tv-1920x720.png",
+            "topShelfWide2x": "./assets/branding/tv-1920x720.png"
           }
         }
       ],
@@ -50,7 +50,7 @@
       ],
       "./plugins/withFmtXcode26Fix"
     ],
-    "name": "MultiTVSample",
+    "name": "FormFit TV",
     "slug": "MultiTVSample",
     "scheme": "com.anonymous.MultiTVSample",
     "android": {
@@ -59,6 +59,10 @@
     "ios": {
       "bundleIdentifier": "com.anonymous.MultiTVSample"
     },
-    "newArchEnabled": false
+    "newArchEnabled": false,
+    "icon": "./assets/branding/icon.png",
+    "web": {
+      "favicon": "./assets/branding/favicon.png"
+    }
   }
 }

@@ -8,11 +8,11 @@ import '../../packages/shared-ui/src/app/configureRemoteControl';
 // Suppress specific deprecation warnings that don't affect functionality
 // These warnings come from libraries using deprecated React methods
 if (__DEV__) {
+  // Keep the TV preview clear of LogBox warning banners; logs remain available in the debugger.
+  LogBox.ignoreAllLogs(true);
+
   // Suppress in LogBox
-  LogBox.ignoreLogs([
-    /findNodeHandle is deprecated/,
-    /findHostInstance_DEPRECATED is deprecated/,
-  ]);
+  LogBox.ignoreLogs([/findNodeHandle is deprecated/, /findHostInstance_DEPRECATED is deprecated/]);
 
   // Also suppress at console level for warnings that slip through
   const originalWarn = console.warn;

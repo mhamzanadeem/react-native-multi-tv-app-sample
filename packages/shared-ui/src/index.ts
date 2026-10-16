@@ -30,3 +30,9 @@ export * from './navigation/types';
 
 // Hooks
 export { scaledPixels } from './hooks/useScale';
+
+// FormFit domain and local recommendation interfaces
+export * from './types/workout';
+export { generatePlan } from './utils/planGenerator';
+export { localPlanGenerator, validatePlan, acceptRecommendation } from './services/workoutPlanner';
+export { default as FitnessHomeScreen } from './screens/fitness/FitnessHomeScreen';

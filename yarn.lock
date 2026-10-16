@@ -3889,6 +3889,7 @@ __metadata:
     expo: "npm:~54.0.0"
     expo-build-properties: "npm:~0.13.0"
     expo-constants: "npm:~17.0.0"
+    expo-file-system: "npm:~19.0.21"
     expo-font: "npm:~13.0.0"
     expo-linear-gradient: "npm:~14.0.0"
     expo-linking: "npm:~7.0.0"
@@ -3930,6 +3931,7 @@ __metadata:
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": "*"
     "@react-navigation/native-stack": ^7.0.0
+    expo-file-system: ~19.0.21
     react: "*"
     react-native: "*"
     react-native-gesture-handler: "*"
@@ -3937,6 +3939,9 @@ __metadata:
     react-native-pixel-perfect: ^1.0.2
     react-native-video: ^6.8.0
     react-tv-space-navigation: ^5.2.0 || ^6.0.0-beta1
+  peerDependenciesMeta:
+    expo-file-system:
+      optional: true
   languageName: unknown
   linkType: soft
 

@@ -1,48 +1,22 @@
 {
   "compilerOptions": {
     "paths": {
-      "@amazon-devices/kepler-media-controls": [
-        "./apps/vega/node_modules/@amazon-devices/kepler-media-controls"
-      ],
-      "@amazon-devices/react-native-kepler": [
-        "./apps/vega/node_modules/@amazon-devices/react-native-kepler"
-      ],
-      "@amazon-devices/react-native-w3cmedia": [
-        "./apps/vega/node_modules/@amazon-devices/react-native-w3cmedia"
-      ],
-      "@react-navigation/drawer": [
-        "./apps/expo-multi-tv/node_modules/@react-navigation/drawer"
-      ],
-      "@react-navigation/native": [
-        "./apps/expo-multi-tv/node_modules/@react-navigation/native"
-      ],
-      "@react-navigation/native-stack": [
-        "./apps/expo-multi-tv/node_modules/@react-navigation/native-stack"
-      ],
-      "react": [
-        "./apps/expo-multi-tv/node_modules/@types/react"
-      ],
-      "react-native": [
-        "./apps/expo-multi-tv/node_modules/react-native"
-      ],
-      "react-native-gesture-handler": [
-        "./apps/expo-multi-tv/node_modules/react-native-gesture-handler"
-      ],
-      "react-native-keyevent": [
-        "./apps/expo-multi-tv/node_modules/react-native-keyevent"
-      ],
-      "react-native-pixel-perfect": [
-        "./apps/expo-multi-tv/node_modules/react-native-pixel-perfect"
-      ],
-      "react-native-video": [
-        "./apps/expo-multi-tv/node_modules/react-native-video"
-      ],
-      "react-tv-space-navigation": [
-        "./apps/expo-multi-tv/node_modules/react-tv-space-navigation"
-      ],
-      "@/*": [
-        "./apps/expo-multi-tv/*"
-      ]
+      "@amazon-devices/kepler-media-controls": ["./apps/vega/node_modules/@amazon-devices/kepler-media-controls"],
+      "@amazon-devices/react-native-kepler": ["./apps/vega/node_modules/@amazon-devices/react-native-kepler"],
+      "@amazon-devices/react-native-w3cmedia": ["./apps/vega/node_modules/@amazon-devices/react-native-w3cmedia"],
+      "@react-navigation/drawer": ["./apps/expo-multi-tv/node_modules/@react-navigation/drawer"],
+      "@react-navigation/native": ["./apps/expo-multi-tv/node_modules/@react-navigation/native"],
+      "@react-navigation/native-stack": ["./apps/expo-multi-tv/node_modules/@react-navigation/native-stack"],
+      "react": ["./apps/expo-multi-tv/node_modules/@types/react"],
+      "react-native": ["./apps/expo-multi-tv/node_modules/react-native"],
+      "react-native-gesture-handler": ["./apps/expo-multi-tv/node_modules/react-native-gesture-handler"],
+      "react-native-keyevent": ["./apps/expo-multi-tv/node_modules/react-native-keyevent"],
+      "react-native-pixel-perfect": ["./apps/expo-multi-tv/node_modules/react-native-pixel-perfect"],
+      "react-native-video": ["./apps/expo-multi-tv/node_modules/react-native-video"],
+      "react-tv-space-navigation": ["./apps/expo-multi-tv/node_modules/react-tv-space-navigation"],
+      "@/*": ["./apps/expo-multi-tv/*"],
+      "expo-file-system/legacy": ["./apps/expo-multi-tv/node_modules/expo-file-system/legacy"],
+      "@amazon-devices/react-navigation__core": ["./apps/vega/node_modules/@amazon-devices/react-navigation__core"]
     }
   }
 }
