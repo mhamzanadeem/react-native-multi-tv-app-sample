@@ -25,6 +25,9 @@ class RemoteControlManager implements RemoteControlManagerInterface {
   private handleKeyDown = (event: KeyboardEvent): void => {
     const mappedKey = KEY_MAPPING[event.code] || KEY_MAPPING[event.key];
     if (mappedKey) {
+      if (event.repeat && [SupportedKeys.Enter, SupportedKeys.PlayPause, SupportedKeys.Back].includes(mappedKey))
+        return;
+      event.preventDefault();
       this.eventEmitter.emit('keyDown', mappedKey);
     }
   };

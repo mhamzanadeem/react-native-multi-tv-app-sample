@@ -9,10 +9,12 @@ const KEY_MAPPING: Record<string, SupportedKeys> = {
   up: SupportedKeys.Up,
   down: SupportedKeys.Down,
   select: SupportedKeys.Enter,
+  // The tvOS BackHandler already owns Menu; emitting it here would navigate twice.
+  playPause: SupportedKeys.PlayPause,
   swipeLeft: SupportedKeys.Left,
   swipeRight: SupportedKeys.Right,
   swipeUp: SupportedKeys.Up,
-  swipeDown: SupportedKeys.Down
+  swipeDown: SupportedKeys.Down,
 };
 
 class RemoteControlManager implements RemoteControlManagerInterface {
@@ -24,7 +26,7 @@ class RemoteControlManager implements RemoteControlManagerInterface {
   }
 
   private handleKeyDown = (evt: HWEvent): void => {
-    if (!evt) return;
+    if (!evt || evt.eventKeyAction === 1) return;
 
     const mappedKey = KEY_MAPPING[evt.eventType];
     if (mappedKey) {

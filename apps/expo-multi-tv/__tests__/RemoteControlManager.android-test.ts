@@ -48,7 +48,8 @@ describe('RemoteControlManager.android', () => {
 describe('Android media and Back keys', () => {
   it.each([
     [67, SupportedKeys.Back],
-    [85, SupportedKeys.PlayPause], [89, SupportedKeys.Rewind],
+    [85, SupportedKeys.PlayPause],
+    [89, SupportedKeys.Rewind],
     [90, SupportedKeys.FastForward],
   ])('maps key code %i to %s', (keyCode, expected) => {
     const handler = jest.fn();
@@ -60,4 +61,21 @@ describe('Android media and Back keys', () => {
     onKeyDown({ keyCode });
     expect(handler).not.toHaveBeenCalled();
   });
+});
+it('activates once per held Select key while retaining directional repeats', () => {
+  const onKeyUp = keyEventMock.onKeyUpListener.mock.calls[0][0];
+  const callback = jest.fn();
+  RemoteControlManager.addKeydownListener(callback);
+  onKeyUp({ keyCode: 23 });
+  onKeyDown({ keyCode: 23 });
+  onKeyDown({ keyCode: 23 });
+  expect(callback).toHaveBeenCalledTimes(1);
+  onKeyUp({ keyCode: 23 });
+  onKeyDown({ keyCode: 23 });
+  expect(callback).toHaveBeenCalledTimes(2);
+  onKeyDown({ keyCode: 22 });
+  onKeyDown({ keyCode: 22 });
+  expect(callback).toHaveBeenCalledTimes(4);
+  RemoteControlManager.removeKeydownListener(callback);
+  onKeyUp({ keyCode: 23 });
 });
