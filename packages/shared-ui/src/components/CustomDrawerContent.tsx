@@ -1,244 +1,111 @@
-import { scaledPixels } from '../hooks/useScale';
-import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-navigation/drawer';
-import { View, StyleSheet, Image, Platform, Text } from 'react-native';
-import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
-import { DrawerParamList } from '../navigation/types';
-import { useMenuContext } from '../components/MenuContext';
-import { safeZones, colors } from '../theme';
-import { useCallback } from 'react';
-import { Direction } from '@bam.tech/lrud';
+import BrandLogo from './BrandLogo';
+import { useCallback, useEffect } from 'react';
+import { View, StyleSheet, Platform, Text } from 'react-native';
+import { DrawerContentComponentProps, DrawerContentScrollView, useDrawerStatus } from '@react-navigation/drawer';
+import { DefaultFocus, SpatialNavigationRoot } from 'react-tv-space-navigation';
+import type { Direction } from '@bam.tech/lrud';
+import type { DrawerParamList } from '../navigation/types';
+import { useMenuContext } from './MenuContext';
+import FocusablePressable from './FocusablePressable';
+import { scaledPixels as px } from '../hooks/useScale';
+import { safeZones } from '../theme';
+import { fitnessColors as c } from '../theme/fitness';
 import { getCloseDrawerDirection } from '../utils/rtl';
 
+const items: { name: keyof DrawerParamList; label: string; icon: string }[] = [
+  { name: 'Home', label: 'Home', icon: 'home' },
+  { name: 'Workouts', label: 'Workouts', icon: 'strength' },
+  { name: 'Progress', label: 'Progress', icon: 'chart' },
+  { name: 'AwsDemo', label: 'AWS demo lab', icon: 'cloud' },
+  { name: 'Media', label: 'Media sample', icon: 'play' },
+  { name: 'Explore', label: 'Explore sample', icon: 'grid' },
+  { name: 'TV', label: 'TV sample', icon: 'home' },
+];
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const navigation = props.navigation;
-  const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
-  const styles = drawerStyles;
-  const drawerItems = [
-    { name: 'Home', label: 'Home' },
-    { name: 'Explore', label: 'Explore' },
-    { name: 'TV', label: 'TV' },
-  ] as const;
-
-  const onDirectionHandledWithoutMovement = useCallback(
-    (movement: Direction) => {
-      if (movement === getCloseDrawerDirection()) {
+  const { isOpen, toggleMenu } = useMenuContext();
+  const status = useDrawerStatus();
+  useEffect(() => toggleMenu(status === 'open'), [status, toggleMenu]);
+  const closeAtEdge = useCallback(
+    (direction: Direction) => {
+      if (direction === getCloseDrawerDirection()) {
         navigation.closeDrawer();
         toggleMenu(false);
       }
     },
     [navigation, toggleMenu],
   );
-
+  const select = (name: keyof DrawerParamList) => {
+    navigation.jumpTo(name);
+    navigation.closeDrawer();
+    toggleMenu(false);
+  };
   return (
-    <SpatialNavigationRoot isActive={isMenuOpen} onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
-      <View style={styles.drawerContainer}>
-        {/* Gradient-like scrim overlay */}
-        <View style={styles.scrimOverlay} />
+    <SpatialNavigationRoot isActive={isOpen} onDirectionHandledWithoutMovement={closeAtEdge}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <BrandLogo />
+          <Text style={styles.caption}>MOVE WELL. YOUR PACE.</Text>
+        </View>
         <DrawerContentScrollView
           {...props}
-          style={styles.container}
-          scrollEnabled={false}
+          style={{ flex: 1 }}
           contentContainerStyle={{
-            ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
-          }}
-        >
-          <View style={styles.header}>
-            <Image source={require('../assets/images/logo.png')} style={styles.profilePic} />
-            <Text style={styles.userName}>Pioneer Tom</Text>
-            <Text style={styles.switchAccount}>Switch account</Text>
-          </View>
-          {drawerItems.map((item, index) =>
-            index === 0 ? (
-              <DefaultFocus key={index}>
-                <SpatialNavigationFocusableView
-                  onSelect={() => {
-                    navigation.jumpTo(item.name as keyof DrawerParamList);
-                    navigation.closeDrawer();
-                    toggleMenu(false);
-                  }}
-                >
-                  {({ isFocused }) => (
-                    <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
-                    </View>
-                  )}
-                </SpatialNavigationFocusableView>
-              </DefaultFocus>
+            paddingHorizontal: px(16),
+            paddingBottom: px(20),
+            ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: px(16), paddingEnd: px(16), paddingTop: 0 }),
+          }}>
+          {items.map((item, index) => {
+            const link = (
+              <FocusablePressable
+                text={item.label}
+                icon={item.icon}
+                variant="compact"
+                accessibilityLabel={item.label}
+                accessibilityState={{ selected: props.state.routes[props.state.index]?.name === item.name }}
+                style={styles.link}
+                onSelect={() => select(item.name)}
+              />
+            );
+            return index === 0 ? (
+              <DefaultFocus key={item.name}>{link}</DefaultFocus>
             ) : (
-              <SpatialNavigationFocusableView
-                key={index}
-                onSelect={() => {
-                  navigation.jumpTo(item.name as keyof DrawerParamList);
-                  navigation.closeDrawer();
-                  toggleMenu(false);
-                }}
-              >
-                {({ isFocused }) => (
-                  <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                    <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
-                  </View>
-                )}
-              </SpatialNavigationFocusableView>
-            ),
-          )}
+              <View key={item.name}>{link}</View>
+            );
+          })}
         </DrawerContentScrollView>
-
-        {/* Settings button at bottom */}
         <View style={styles.footer}>
-          <SpatialNavigationFocusableView
-            onSelect={() => {
-              navigation.jumpTo('Settings');
-              navigation.closeDrawer();
-              toggleMenu(false);
-            }}
-          >
-            {({ isFocused }) => (
-              <View style={[styles.settingsButton, isFocused && styles.settingsButtonFocused]}>
-                <View style={styles.cogIcon}>
-                  <Text style={[styles.cogIconText, isFocused && styles.cogIconTextFocused]}>⚙</Text>
-                </View>
-              </View>
-            )}
-          </SpatialNavigationFocusableView>
+          <FocusablePressable
+            text="Settings"
+            icon="settings"
+            variant="compact"
+            accessibilityLabel="Settings"
+            style={styles.link}
+            onSelect={() => select('Settings')}
+          />
         </View>
       </View>
     </SpatialNavigationRoot>
   );
 }
-
-const drawerStyles = StyleSheet.create({
-    drawerContainer: {
-      flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    },
-    scrimOverlay: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      opacity: 0.9,
-    },
-    container: {
-      flex: 1,
-      paddingTop: scaledPixels(safeZones.titleSafe.vertical),
-    },
-    header: {
-      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
-      paddingVertical: scaledPixels(24),
-      marginBottom: scaledPixels(16),
-    },
-    profilePic: {
-      width: scaledPixels(200),
-      height: scaledPixels(200),
-      borderRadius: scaledPixels(24),
-      borderWidth: scaledPixels(4),
-      borderColor: colors.border,
-    },
-    userName: {
-      color: colors.text,
-      fontSize: scaledPixels(36),
-      fontWeight: '600',
-      marginTop: scaledPixels(20),
-    },
-    switchAccount: {
-      color: colors.textSecondary,
-      fontSize: scaledPixels(22),
-      marginTop: scaledPixels(8),
-    },
-    searchContainer: {
-      backgroundColor: colors.cardElevated,
-      padding: scaledPixels(16),
-      marginHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
-      marginVertical: scaledPixels(12),
-      borderRadius: scaledPixels(8),
-    },
-    searchText: {
-      color: colors.textSecondary,
-      fontSize: scaledPixels(20),
-    },
-    menuItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: scaledPixels(20),
-      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
-      marginHorizontal: scaledPixels(16),
-      marginVertical: scaledPixels(6),
-      borderRadius: scaledPixels(8),
-      minHeight: scaledPixels(72),
-      borderWidth: scaledPixels(3),
-      borderColor: 'transparent',
-    },
-    menuItemFocused: {
-      backgroundColor: colors.focusBackground,
-      borderColor: colors.focusBorder,
-      transform: [{ scale: 1.05 }],
-      shadowColor: colors.focus,
-      shadowOffset: {
-        width: 0,
-        height: 0,
-      },
-      shadowOpacity: 0.6,
-      shadowRadius: scaledPixels(12),
-      elevation: 8,
-    },
-    icon: {
-      width: scaledPixels(32),
-      height: scaledPixels(32),
-      marginEnd: scaledPixels(20),
-    },
-    menuText: {
-      color: colors.text,
-      fontSize: scaledPixels(36),
-      fontWeight: '500',
-    },
-    menuTextFocused: {
-      color: colors.textOnPrimary,
-      fontWeight: '600',
-    },
-    footer: {
-      paddingHorizontal: scaledPixels(16),
-      paddingBottom: scaledPixels(safeZones.actionSafe.vertical),
-      paddingTop: scaledPixels(16),
-      borderTopWidth: scaledPixels(2),
-      borderTopColor: colors.border,
-    },
-    settingsButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: scaledPixels(20),
-      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
-      borderRadius: scaledPixels(8),
-      minHeight: scaledPixels(72),
-      borderWidth: scaledPixels(3),
-      borderColor: 'transparent',
-    },
-    settingsButtonFocused: {
-      backgroundColor: colors.focusBackground,
-      borderColor: colors.focusBorder,
-      transform: [{ scale: 1.05 }],
-      shadowColor: colors.focus,
-      shadowOffset: {
-        width: 0,
-        height: 0,
-      },
-      shadowOpacity: 0.6,
-      shadowRadius: scaledPixels(12),
-      elevation: 8,
-    },
-    cogIcon: {
-      width: scaledPixels(64),
-      height: scaledPixels(64),
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    cogIconText: {
-      fontSize: scaledPixels(48),
-      color: colors.text,
-    },
-    cogIconTextFocused: {
-      color: colors.textOnPrimary,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0C142B',
+    borderEndWidth: 1,
+    borderEndColor: '#3E5380',
+    paddingTop: px(safeZones.titleSafe.vertical),
+  },
+  header: { paddingHorizontal: px(28), paddingBottom: px(28), gap: px(10) },
+  brand: { color: c.text, fontSize: px(32), fontWeight: '700' },
+  accent: { color: c.primary },
+  caption: { color: c.textSecondary, fontSize: px(18), lineHeight: px(26) },
+  link: { width: '100%', minWidth: 0, minHeight: px(84), marginBottom: px(12), backgroundColor: '#17233E' },
+  footer: {
+    paddingHorizontal: px(16),
+    paddingTop: px(16),
+    paddingBottom: px(safeZones.actionSafe.vertical),
+    borderTopWidth: 1,
+    borderTopColor: c.border,
+  },
+});

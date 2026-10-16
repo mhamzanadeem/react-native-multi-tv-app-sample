@@ -1,23 +1,23 @@
 export const colors = {
   // Primary colors
-  primary: '#007AFF',
-  secondary: '#5856D6',
+  primary: '#718EFF',
+  secondary: '#A19AFF',
 
   // Backgrounds
-  background: '#000000',
-  backgroundElevated: '#141414',
-  card: '#1C1C1E',
-  cardElevated: '#2C2C2E',
+  background: '#080D20',
+  backgroundElevated: '#14203E',
+  card: '#14203A',
+  cardElevated: '#202E40',
   overlay: '#1A1A1A',
 
   // Text colors with proper contrast (WCAG AAA compliant)
   text: '#FFFFFF',
   textSecondary: '#C7C7CC',
   textTertiary: '#8E8E93',
-  textOnPrimary: '#000000',
+  textOnPrimary: '#FFFFFF',
 
   // Border and dividers
-  border: '#48484A',
+  border: '#3E5380',
   borderLight: '#38383A',
   divider: '#2C2C2E',
 
@@ -29,11 +29,11 @@ export const colors = {
   info: '#0A84FF',
 
   // Focus and interaction states
-  focus: '#FFFFFF',
-  focusBorder: '#FFFFFF',
-  focusBackground: '#FFFFFF',
+  focus: '#8DBBFF',
+  focusBorder: '#9CEEFF',
+  focusBackground: '#253E86',
   focusBackgroundSecondary: 'rgba(255, 255, 255, 0.15)',
-  focusGlow: 'rgba(255, 255, 255, 0.4)',
+  focusGlow: 'rgba(107, 143, 255, 0.65)',
 
   // Interactive states
   pressedOverlay: 'rgba(255, 255, 255, 0.1)',
