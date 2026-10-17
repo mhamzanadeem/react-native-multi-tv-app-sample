@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createRepositories } from '../data/workoutRepositories';
 import storage from '../data/storage';
+import { getInstallationId } from '../data/guestInstallation';
 import { DEFAULT_CONFIG } from '../domain/workoutConfig';
 import type { WorkoutSummary } from '../domain/workoutSession';
 import type { WorkoutConfig, WorkoutPlan } from '../types/workout';
@@ -9,8 +10,11 @@ import { generateCloudPlan, saveCloudSession } from '../services/cloudWorkouts';
 
 interface FormFitState {
   ready: boolean;
+  installationId: string | null;
   preferences: WorkoutConfig;
   plan: WorkoutPlan | null;
+  plans: WorkoutPlan[];
+  openPlan(plan: WorkoutPlan): void;
   history: WorkoutSummary[];
   lastSummary: WorkoutSummary | null;
   storageWarning: string | null;
@@ -21,8 +25,10 @@ interface FormFitState {
 const Context = createContext<FormFitState | null>(null);
 export function FormFitProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
+  const [installationId, setInstallationId] = useState<string | null>(null);
   const [preferences, setPreferences] = useState<WorkoutConfig>({ ...DEFAULT_CONFIG, equipment: [] });
   const [plan, setPlan] = useState<WorkoutPlan | null>(null);
+  const [plans, setPlans] = useState<WorkoutPlan[]>([]);
   const [history, setHistory] = useState<WorkoutSummary[]>([]);
   const [lastSummary, setLastSummary] = useState<WorkoutSummary | null>(null);
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
@@ -31,11 +37,22 @@ export function FormFitProvider({ children }: { children: React.ReactNode }) {
   const repositories = useMemo(() => createRepositories(storage, setStorageWarning), []);
   useEffect(() => {
     let mounted = true;
-    Promise.all([repositories.preferences.get(), repositories.history.list()])
-      .then(([config, rows]) => {
+    getInstallationId()
+      .then((id) => {
+        if (mounted) setInstallationId(id);
+      })
+      .catch(() => {
+        if (mounted)
+          setStorageWarning(
+            'Your guest TV ID could not be loaded. Cloud sync is unavailable; local workouts remain available.',
+          );
+      });
+    Promise.all([repositories.preferences.get(), repositories.history.list(), repositories.plans.list()])
+      .then(([config, rows, savedPlans]) => {
         if (mounted) {
           setPreferences(config);
           setHistory(rows);
+          setPlans(savedPlans);
           setReady(true);
         }
       })
@@ -74,6 +91,7 @@ export function FormFitProvider({ children }: { children: React.ReactNode }) {
       await repositories.preferences.save(config);
       setPreferences({ ...config, equipment: [...config.equipment] });
       setPlan(next);
+      setPlans(await repositories.plans.append(next));
       return next;
     },
     [repositories],
@@ -91,8 +109,15 @@ export function FormFitProvider({ children }: { children: React.ReactNode }) {
     <Context.Provider
       value={{
         ready,
+        installationId,
         preferences,
         plan,
+        plans,
+        openPlan: (savedPlan) => {
+          validatePlan(savedPlan);
+          if (savedPlan.source === 'aws') cloudPlanIds.current.add(savedPlan.id);
+          setPlan(savedPlan);
+        },
         history,
         lastSummary,
         storageWarning,

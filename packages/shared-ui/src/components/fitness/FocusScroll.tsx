@@ -21,3 +21,20 @@ export function useFocusReveal(focused: boolean) {
   }, [focused, show]);
   return { ref, onLayout: show };
 }
+
+// null means the focused item is already visible: preserve the current viewport.
+export function focusScrollTarget(
+  top: number,
+  height: number,
+  scrollY: number,
+  viewportHeight: number,
+  margin: number,
+): number | null {
+  if (viewportHeight <= 0 || height <= 0) return null;
+  const visibleTop = scrollY + margin;
+  const visibleBottom = scrollY + viewportHeight - margin;
+  if (top >= visibleTop && top + height <= visibleBottom) return null;
+  if (top < visibleTop) return Math.max(0, top - margin);
+  if (height > viewportHeight - 2 * margin) return Math.max(0, top - margin);
+  return Math.max(0, top + height + margin - viewportHeight);
+}

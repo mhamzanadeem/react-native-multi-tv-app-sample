@@ -47,6 +47,7 @@ function SessionExperience({ plan }: { plan: WorkoutPlan }) {
   const { recordSession } = useFormFit();
   const { state, dispatch } = useWorkoutSession(plan, isFocused);
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const [exitRequested, setExitRequested] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const pendingAction = useRef<NavigationAction | null>(null);
   const wasRunning = useRef(false);
@@ -57,21 +58,31 @@ function SessionExperience({ plan }: { plan: WorkoutPlan }) {
     dispatch({ type: 'pause', now: Date.now() });
     setConfirmVisible(true);
   }, [dispatch, state.status, confirmVisible]);
-  usePreventRemove(state.status === 'running' || state.status === 'paused', ({ data }) => {
-    pendingAction.current = data.action;
-    requestEnd();
-  });
+  usePreventRemove(
+    !exitRequested && isFocused && (state.status === 'running' || state.status === 'paused'),
+    ({ data }) => {
+      pendingAction.current = data.action;
+      requestEnd();
+    },
+  );
   const cancel = () => {
     setConfirmVisible(false);
     pendingAction.current = null;
     if (wasRunning.current) dispatch({ type: 'resume', now: Date.now() });
   };
   useEffect(() => {
-    if (state.status === 'abandoned') {
-      if (pendingAction.current) navigation.dispatch(pendingAction.current);
+    if (!exitRequested) return;
+    // Native-stack reads prevent-remove state from its provider. Let the guard's
+    // disabled state commit before resetting; dispatching in the same effect
+    // flush as abandonment can still encounter the previous native guard.
+    const frame = requestAnimationFrame(() => {
+      const action = pendingAction.current;
+      pendingAction.current = null;
+      if (action) navigation.dispatch(action);
       else navigation.reset({ index: 0, routes: [{ name: 'DrawerNavigator', params: { screen: 'Home' } }] });
-    }
-  }, [state.status, navigation]);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [exitRequested, navigation]);
   const saveSummary = useCallback(async () => {
     if (saving.current || state.status !== 'completed') return;
     saving.current = true;
@@ -123,7 +134,7 @@ function SessionExperience({ plan }: { plan: WorkoutPlan }) {
       <FitnessScreen
         title={state.status === 'paused' ? 'Paused / take your time' : done ? 'Session finished' : phase}
         eyebrow="03 / GUIDED WORKOUT"
-        active={!confirmVisible}>
+        active={!confirmVisible && !exitRequested}>
         <View style={ui.row}>
           <ImageBackground
             source={require('../../assets/fitness/workout-hero.png')}
@@ -177,28 +188,38 @@ function SessionExperience({ plan }: { plan: WorkoutPlan }) {
           </View>
         </View>
         {!done ? (
-          <Actions>
+          <Actions singleRow>
             <DefaultFocus>
               <FitnessButton
                 text={mainLabel}
+                description="Control your workout timer"
                 onSelect={() =>
                   dispatch({ type: state.status === 'ready' ? 'start' : running ? 'pause' : 'resume', now: Date.now() })
                 }
-                style={ui.primary}
+                style={styles.actionCard}
                 testID="session-main"
               />
             </DefaultFocus>
             <FitnessButton
               text={step.kind === 'exercise' ? 'Finish set' : step.kind === 'rest' ? 'Finish rest' : 'Next exercise'}
+              description="Move to the next workout phase"
+              style={styles.actionCard}
               disabled={state.status === 'ready'}
               onSelect={() => dispatch({ type: 'next', now: Date.now() })}
             />
             <FitnessButton
               text="Skip exercise"
+              description="Move past the current exercise"
+              style={styles.actionCard}
               disabled={state.status === 'ready' || step.kind === 'transition'}
               onSelect={() => dispatch({ type: 'skip', now: Date.now() })}
             />
-            <FitnessButton text="End session" onSelect={requestEnd} />
+            <FitnessButton
+              text="End session"
+              description="Review before leaving this workout"
+              style={styles.actionCard}
+              onSelect={requestEnd}
+            />
           </Actions>
         ) : (
           <Text style={ui.body}>Recording your completion...</Text>
@@ -223,7 +244,9 @@ function SessionExperience({ plan }: { plan: WorkoutPlan }) {
         visible={confirmVisible}
         cancel={cancel}
         confirm={() => {
+          if (exitRequested) return;
           setConfirmVisible(false);
+          setExitRequested(true);
           dispatch({ type: 'abandon', now: Date.now() });
         }}
       />
@@ -231,6 +254,7 @@ function SessionExperience({ plan }: { plan: WorkoutPlan }) {
   );
 }
 const styles = StyleSheet.create({
+  actionCard: { width: '100%', minWidth: 0, minHeight: px(230), padding: px(20) },
   main: { flex: 7, minWidth: px(520) },
   aside: { flex: 4, minWidth: px(360) },
   timer: {

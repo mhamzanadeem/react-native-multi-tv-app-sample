@@ -70,7 +70,7 @@ it('keeps focused buttons readable even when a selected style supplies a dark ba
   const press = renderer.root.findAll(
     (node) => node.props.accessibilityLabel === 'Selected option' && typeof node.props.onPress === 'function',
   )[0];
-  expect(StyleSheet.flatten(press.props.style).backgroundColor).toBe('#253E86');
+  expect(StyleSheet.flatten(press.props.style).backgroundColor).toBe('#27334D');
   await TestRenderer.act(async () => renderer.unmount());
 });
 
@@ -96,8 +96,8 @@ it('keeps disabled cards neutral even when their spatial node is focused', async
   try {
     await TestRenderer.act(async () => { renderer = TestRenderer.create(React.createElement(Button, { text: 'Unavailable', accessibilityLabel: 'Unavailable', disabled: true, onSelect })); });
     const button = renderer.root.findAll((node) => node.props.accessibilityLabel === 'Unavailable' && typeof node.props.onPress === 'function')[0];
-    expect(StyleSheet.flatten(button.props.style).backgroundColor).toBe('#202E40');
-    expect(StyleSheet.flatten(button.props.style).shadowOpacity).toBeUndefined();
+    expect(StyleSheet.flatten(button.props.style).backgroundColor).toBe('#282D36');
+    expect(StyleSheet.flatten(button.props.style).shadowOpacity).toBe(0);
     renderer.root.findByType('FocusNode').props.onSelect();
     expect(onSelect).not.toHaveBeenCalled();
   } finally { if (renderer) await TestRenderer.act(async () => renderer.unmount()); }

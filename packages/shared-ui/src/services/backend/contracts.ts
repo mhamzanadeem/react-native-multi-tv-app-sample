@@ -18,7 +18,7 @@ export interface Requests {
 }
 export interface Responses {
   generate: { planId: string; plan: WorkoutPlan; notes: string[] };
-  history: { sessions: WorkoutSummary[]; sampleData: boolean };
+  history: { sessions: WorkoutSummary[]; plans?: WorkoutPlan[]; sampleData: boolean };
   saveSession: { sessionId: string; summary: WorkoutSummary };
   getPreferences: { preferences: WorkoutConfig };
   updatePreferences: { preferences: WorkoutConfig };

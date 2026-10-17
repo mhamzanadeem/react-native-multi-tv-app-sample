@@ -7,6 +7,16 @@ function durable() {
   const memory = memoryStorage();
   return { ...memory, persistent: true };
 }
+it('keeps generated plans across restarts without fabricating completed sessions', async () => {
+  const { generatePlan } = require('../../../packages/shared-ui/src/utils/planGenerator');
+  const storage = durable();
+  const repo = createRepositories(storage);
+  const plan = generatePlan({ ...DEFAULT_CONFIG, fitnessLevel: 'advanced', durationMinutes: 30 });
+  await Promise.all([repo.plans.append(plan), repo.plans.append(plan)]);
+  const reopened = createRepositories(storage);
+  expect(await reopened.plans.list()).toEqual([plan]);
+  expect(await reopened.history.list()).toEqual([]);
+});
 function summary(id = 'one'): WorkoutSummary {
   return {
     id,

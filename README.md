@@ -1,3 +1,324 @@
+<p align="center">
+  <img src="packages/shared-ui/src/assets/branding/formfit-logo.png" alt="FormFit TV" width="104" />
+</p>
+
+# FormFit TV
+
+**Personalized workouts, guided from your TV remote.**
+
+[![React Native TV](https://img.shields.io/badge/React_Native_TV-0.81-61DAFB?logo=react&logoColor=white)](apps/expo-multi-tv/package.json) [![AWS](https://img.shields.io/badge/AWS-Lambda_%2B_DynamoDB-FF9900)](#aws-integration) [![License: MIT-0](https://img.shields.io/badge/License-MIT--0-blue)](LICENSE)
+
+FormFit TV turns your goals, available time and equipment into a workout you can follow on the big screen. Build a plan, work through each exercise, and review your progress without reaching for your phone.
+
+Built for the **Build, Ship, Shape: Amazon Developer Hackathon**, targeting the Fire TV track with an AWS-backed workout planner. The project extends Amazon's React Native Multi-TV sample.
+
+[Get started](#getting-started) · [Architecture](#architecture) · [AWS setup](#aws-integration) · [Guest TV identity](#guest-tv-identity) · [Hackathon](#hackathon) · [License](#license)
+
+## Features
+
+- 🎯 **10-step workout builder:** goal, experience, duration, equipment, workout style, body focus, position, recovery, exercises to avoid, and review.
+- 🎮 **TV controls:** image-backed cards, readable descriptions, D-pad navigation, a distinct focus glow and checkmarks for selected options.
+- ⏱️ **Guided sessions:** exercise timers, sets, rest and transitions; pause, resume, skip or confirm before ending early.
+- 📚 **One Recent Sessions list:** generated plans appear immediately alongside completed sessions, with clear status labels. Saved plans can be reopened after restarting.
+- 📺 **Guest TV identity:** a persistent installation ID groups cloud data for each TV without sign-in.
+- ☁️ **Offline recovery:** AWS handles planning first; recoverable failures or the 10-second deadline trigger local generation with a visible notice.
+
+Planning uses validated catalogue rules. Bedrock, camera-based form analysis and voice coaching are not part of the current implementation.
+
+## How it works
+
+1. **Home:** choose **Create Workout Plan**, **Workout History**, or **Menu** from one row of cards.
+2. **Personalize:** complete ten steps. The progress indicator shows three stages at a time; option descriptions explain the effect of each choice.
+3. **Generate:** review your preferences and request a plan. It immediately appears in Recent Sessions, even before you start it.
+4. **Exercise:** follow the timer and use four session cards to pause/resume, finish the current phase, skip an exercise, or end the session.
+5. **Return:** open Workout History to review generated plans and completed sessions. Progress automatically refreshes this guest TV's cloud history and also offers manual refresh.
+
+```mermaid
+flowchart TD
+    A[Launch: load Guest TV ID and local data] --> B[Home]
+    B -->|Create Workout Plan| C[10-step builder and review]
+    C --> E[Generate with AWS and TV ID]
+    E --> F{Usable response?}
+    F -->|Yes| S[Save generated plan locally]
+    S --> G[Review plan]
+    F -->|Recoverable failure / timeout| H[Local catalogue plan + warning]
+    H --> S
+    F -->|Invalid / incompatible preferences| I[Show error and keep choices]
+    I --> C
+    G -->|Change preferences| C
+    G --> J[Active workout: local timer and controls]
+    J -->|Pause / resume / skip| J
+    J -->|Confirm End workout| B
+    J --> K[Completion: local save and optional cloud save]
+    K --> L[Recent Sessions: generated + completed]
+    S --> L
+    B -->|Workout History| L
+    L -->|View workout| G
+    L --> B
+```
+
+Use the D-pad to move, OK/Enter to select, and Back to return. A checkmark identifies the saved choice within a group; the glow identifies the control currently in focus.
+
+### TV navigation and presentation
+
+| Interaction | Behavior |
+| --- | --- |
+| D-pad and OK/Enter | Move focus, then activate or select; focusing an option does not select it |
+| Menu | Opens one collapsible sidebar, including Settings |
+| Builder | Equal-sized option cards with descriptions and select/deselect controls for multi-select choices |
+| Long screens | Focused content is revealed when needed; **Jump to bottom / Back to top** provides a shortcut |
+| Home branding | Persistent header with a prominent Guest TV ID; section title follows focused Home content |
+| Session actions | Four equal cards in one row; highlight follows remote focus |
+| End workout | Confirmation pauses the workout; cancel can resume, confirm returns Home without recording a completion |
+
+## Getting started
+
+### Requirements
+
+| Tool | Development configuration |
+| --- | --- |
+| Node.js | 22 LTS |
+| Yarn | 4.5.0 through Corepack |
+| Java | JDK 17 |
+| Android Studio | SDK Platform 36, Platform-Tools, Emulator and required Build-Tools |
+| Virtual device | Android TV API 36 x86_64, named `Hackathon_TV` |
+
+API 36 is the emulator baseline used for development. The app configuration separately uses compile SDK 36, target SDK 34 and minimum SDK 24; this is not a compatibility certification for every TV version.
+
+### Install and run
+
+```powershell
+git clone --branch hackathon https://github.com/mhamzanadeem/react-native-multi-tv-app-sample.git
+cd react-native-multi-tv-app-sample
+corepack enable
+yarn.cmd install --immutable
+```
+
+Create `Hackathon_TV` in Android Studio's Device Manager using a **TV system image**, with keyboard and D-pad support enabled. Set `JAVA_HOME` to your JDK 17 installation if needed.
+
+Native build folders are generated locally. On a fresh checkout:
+
+```powershell
+$env:EXPO_TV = '1'
+yarn.cmd workspace @multi-tv/expo-multi-tv exec expo prebuild --platform android --no-install
+yarn.cmd tv:start -CheckOnly
+yarn.cmd tv:start
+```
+
+The launcher checks the SDK, starts the selected TV, waits for boot, then builds and installs FormFit. For an existing native project, skip prebuild unless its configuration changed. Avoid `--clean` when native files contain custom edits.
+
+- **Different SDK or AVD:** pass `-SdkPath` and `-AvdName` to `tv:start`.
+- **Browser preview:** run `yarn.cmd dev:web` and open port 8082.
+- **Emulator offline or input unresponsive:** follow the [ADB diagnostics](docs/setup.md#adb-diagnostics-without-a-global-path-change) before changing app code.
+- **Launcher icon updates:** rerun the non-clean prebuild and rebuild/install; a Metro refresh alone will not replace native launcher resources.
+
+See [Setup and deployment](docs/setup.md) for the complete Windows walkthrough.
+
+## Architecture
+
+The TV screens, workout rules and data adapters have separate responsibilities. The same catalogue and planning rules run in Lambda and in the local fallback, while the workout timer stays on the TV.
+
+```mermaid
+flowchart TB
+    Remote[TV remote / D-pad / Enter] --> UI[Expo + React Native TV screens]
+    UI --> Focus[Shared cards + spatial navigation]
+    UI --> State[FormFitContext + session hook]
+    State --> Domain[Typed configuration + validation + planner + session reducer]
+    State --> HTTP[AWS HTTP adapter]
+    State --> Repo[Local preferences, plans and completion repositories]
+    State --> Guest[Persistent Guest TV installation ID]
+    Repo --> Store[Native file storage / browser localStorage]
+    Guest -->|X-TV-Installation-Id| HTTP
+    HTTP --> API[API Gateway HTTP API]
+    API --> Lambda[Lambda rule-based planner and API handler]
+    Lambda --> Rules[Shared domain and catalogue code]
+    Lambda --> Scope[Request-scoped guest partition]
+    Scope --> DB[(DynamoDB: TV installation records)]
+    HTTP -. unavailable or 10-second deadline .-> Local[On-device catalogue planner]
+    Local --> Domain
+    Vega[Separate Vega app/runtime] --> Shared[Platform-specific shared adapters]
+```
+
+| Area | Responsibility |
+| --- | --- |
+| `apps/expo-multi-tv` | Expo application, TV build configuration and tests |
+| `packages/shared-ui/src/screens/fitness` | Workout screens and user interaction |
+| `packages/shared-ui/src/components` | Cards, branding, focus and shared presentation |
+| `packages/shared-ui/src/domain` | Configuration validation, session state and progress calculations |
+| `packages/shared-ui/src/services` | Planning interfaces and HTTP/backend adapters |
+| `packages/shared-ui/src/data` | Exercise catalogue, local repositories and platform storage |
+| `infrastructure/lambda` | Request handling and DynamoDB adapter |
+| `apps/vega` | Separate Vega runtime and platform-specific concerns |
+
+### Session and storage behavior
+
+- Timers, rest and exercise progression run locally, including when the network drops.
+- Generated plans are saved locally immediately. Completed sessions save locally first; cloud-generated plans also trigger a cloud completion save.
+- A failed cloud completion save can be retried while its screen is open; there is no persistent retry outbox.
+- Preferences, generated plans, completion history and the Guest TV ID survive normal restarts when storage is available. Active sessions and unfinished builder drafts are not restored.
+- Recent Sessions combines local and cloud records by ID. A generated plan does not increase completed-workout statistics. Ending early leaves the generated plan available without creating a completion record.
+- Up to 200 recent entries are shown. The original media/player code and separate Vega runtime remain in the repository.
+
+## AWS integration
+
+API Gateway receives workout preferences, Lambda validates them and builds a plan, and DynamoDB stores the plan and session records. IAM controls Lambda's table access; CloudWatch collects backend logs.
+
+```mermaid
+flowchart LR
+    TV[Guest TV: persistent installation ID] -->|HTTPS JSON + TV ID header| GW[Amazon API Gateway HTTP API]
+    GW -->|Payload v2 event| FN[AWS Lambda: formfit-api]
+    FN -->|Validate + filter + build| Planner[Shared rules and exercise catalogue]
+    Planner -->|Validated plan| FN
+    FN --> Scope[Validate TV ID and select partition]
+    Scope -->|GetItem / PutItem / Query| DDB[(FormFitDemo: TV installation partition)]
+    DDB -->|Plan / history / preferences| FN
+    FN -->|Status + JSON| GW
+    GW -->|Plan or error response| TV
+    Role[IAM execution role] -. table access and logging permissions .-> FN
+    FN -->|Backend logs| CW[Amazon CloudWatch Logs]
+```
+
+### Plan generation and fallback
+
+- The normal workout flow calls AWS with a **10-second client timeout**.
+- A recoverable failure or timeout triggers the bundled catalogue planner and a visible notice.
+- Invalid or incompatible requests remain errors; offline recovery does not bypass their constraints.
+- Local recovery produces a new local plan. It does not return a cached AWS plan.
+
+<details>
+<summary>Request and completion sequence</summary>
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant TV as FormFit TV
+    participant API as API Gateway
+    participant L as Lambda
+    participant D as DynamoDB
+    User->>TV: Choose preferences and Generate
+    TV->>API: POST /v1/workouts/generate + TV ID header
+    API->>L: HTTP API event
+    L->>L: Validate inputs and construct plan with catalogue rules
+    L->>D: Store request and canonical plan under TV partition
+    D-->>L: Write result
+    L-->>API: Plan JSON
+    API-->>TV: Validated plan + matching TV ID
+    TV->>TV: Persist plan and show it in Recent Sessions
+    Note over TV: If recoverable failure or 10-second timeout: local plan + warning
+    User->>TV: Start and complete workout
+    Note over TV: Timer and progression execute locally
+    TV->>TV: Persist completed summary locally
+    opt Plan was generated by AWS
+        TV->>API: POST /v1/workouts/sessions
+        API->>L: Completion payload
+        L->>D: Conditional session write and history in same TV partition
+        D-->>L: Save result
+        L-->>API: Result
+        API-->>TV: Saved or recoverable save error
+    end
+```
+
+</details>
+
+### Connect your AWS account
+
+| Setting | Where to configure it |
+| --- | --- |
+| API origin | `CLOUD_DEMO_URL` in `packages/shared-ui/src/services/cloudWorkouts.ts` |
+| DynamoDB table | Lambda environment variable `TABLE_NAME`; String keys `pk` and `sk` |
+| Lambda runtime | Node.js 22.x, handler `index.handler`, 256 MB, 20-second timeout |
+| API routes and stage | API Gateway HTTP API, Lambda payload v2, `$default` with auto-deploy |
+| Browser CORS headers | Allow `Content-Type`, `X-Request-Id`, and `X-TV-Installation-Id` |
+| Backend deployment | Build with `scripts/build-lambda.ps1`; upload `.validation/formfit-lambda.zip` |
+
+The existing deployment uses `us-east-1`. Follow [AWS deployment instructions](docs/setup.md#configure-your-own-aws-deployment) and the [Lambda guide](docs/lambda-workout-planner.md) for routes, permissions, table records and verification.
+
+### Guest TV identity
+
+- **One installation, one guest:** a `tv-` ID is displayed beneath the app logo. Android stores it in persistent app documents; web uses localStorage. It is not a hardware serial number.
+- **Scoped requests:** each cloud call sends `X-TV-Installation-Id`. Lambda validates the format and uses `pk = TV#<installationId>` for that TV's records.
+- **Response check:** the client only accepts a success response echoing the same ID. Deploy the matching Lambda package before using the updated app.
+- **Restart behavior:** reloading preserves the ID. Clearing app data may remove it; reinstall behavior depends on platform backup restoration. Multiple people using one installation share its guest history.
+- **Existing records:** local saved workouts remain. Earlier `DEMO#shared` cloud records are preserved, but are not automatically assigned or exposed to a new guest.
+- **Security boundary:** this is unauthenticated guest grouping. Someone who obtains another TV ID can impersonate that guest. Use synthetic demo data; authenticated ownership, cross-TV accounts and household profiles remain future work.
+
+| DynamoDB key | Stored data |
+| --- | --- |
+| `pk = TV#<installationId>` | Groups one guest installation's records |
+| `sk = PLAN#<planId>` | Generated workout, preferences and exercises |
+| `sk = REQUEST#<requestId>` | Idempotent generation request and response |
+| `sk = SESSION#<sessionId>` | Completed workout attempt |
+| `sk = HISTORY#<timestamp>#<sessionId>` | Date-ordered completion history |
+| `sk = PREFERENCES` | Guest preferences when the preferences endpoint is used |
+
+The history endpoint returns generated plans and completion summaries for the requesting TV. Health probes use a separate `SYSTEM#health` partition.
+
+See [Guest TV identity and deployment](docs/guest-tv-identity.md) for the rollout steps, CORS settings, verification and limitations.
+
+## Development
+
+```powershell
+yarn.cmd workspace @multi-tv/expo-multi-tv typecheck
+yarn.cmd workspace @multi-tv/expo-multi-tv exec jest --runInBand --watch=false
+```
+
+- Latest focused checks: **110 tests in five suites** passed for guest identity, screen flows, Lambda planning, backend contracts and persistence. Subsequent Home/navigation checks passed **26 tests in three suites**; icon-layout checks passed **6 button tests**. Expo TypeScript checks passed. These are overlapping targeted runs, not an aggregate full-suite count.
+- These checks do not replace D-pad and layout verification on a running TV.
+- The Expo fitness journey is the current implementation focus. The Vega workspace is preserved, but its fitness-shell integration and native Fire OS/Vega verification are not complete.
+
+### Documentation
+
+- [Setup, emulator diagnostics and AWS deployment](docs/setup.md)
+- [Lambda planner and DynamoDB records](docs/lambda-workout-planner.md)
+- [API contract](docs/api-contract-v1.md)
+- [Guest TV identity, partitions and deployment](docs/guest-tv-identity.md)
+- [Brand assets](docs/branding.md)
+- [Change groups and commit instructions](docs/commit-plan.md)
+
+## Hackathon
+
+**Target entries: Fire TV track + AWS Builder mini-challenge.**
+
+FormFit turns Amazon's multi-TV sample into a complete fitness experience: choose a routine, follow it with a remote, and save the result. The tables below connect the implementation to the [official requirements](https://amazonappdev2026.devpost.com/rules).
+
+### Fire TV track
+
+| Requirement | FormFit implementation | Evidence |
+| --- | --- | --- |
+| Fitness application for TV | Workout setup, plan review, guided sessions and progress | [Screens](packages/shared-ui/src/screens/fitness) |
+| Interaction suited to the device | D-pad navigation, OK/Enter selection, focus highlights and selected-state checkmarks | [TV controls](packages/shared-ui/src/components/FocusablePressable.tsx) |
+| Substantial additions to an existing project | Custom planning, local session execution, persistence and cloud integration extend the original media sample | [Architecture](#architecture) · [Change groups](docs/commit-plan.md) |
+| Reproducible implementation | Source, artwork, setup instructions and automated regression tests are included | [Run the app](#getting-started) · [Tests](apps/expo-multi-tv/__tests__) |
+
+### AWS Builder mini-challenge
+
+| Requirement | FormFit implementation | Evidence |
+| --- | --- | --- |
+| AWS services incorporated into the primary-track project | API Gateway receives preferences; Lambda builds plans; DynamoDB stores plans and completions | [Cloud adapter](packages/shared-ui/src/services/cloudWorkouts.ts) · [Lambda](infrastructure/lambda) |
+| Documented integration | Architecture, request flow, configuration, routes and deployment steps | [AWS architecture](#aws-integration) · [Deployment guide](docs/setup.md#configure-your-own-aws-deployment) |
+| Demonstrable application behavior | Cloud-generated plans feed the workout session; a 10-second deadline provides visible local recovery | [Application state](packages/shared-ui/src/hooks/FormFitContext.tsx) · [Journey tests](apps/expo-multi-tv/__tests__/formFitScreens-test.js) |
+
+### One-minute review
+
+- **Product:** inspect [Features](#features) and [How it works](#how-it-works).
+- **Engineering:** inspect the [architecture diagrams](#architecture), [AWS flow](#aws-integration) and [test commands](#development).
+- **Recorded validation:** see [Development](#development) for the latest focused regression runs and their scope; on-device verification remains necessary.
+
+### Submission readiness
+
+- **Implemented:** TV fitness journey, AWS integration, offline recovery, source assets and setup documentation.
+- **Still to verify:** final demo video, judge repository access, product feedback, entrant eligibility and submission completion. These are not certified by source code or automated tests.
+- **Platform evidence:** the [FAQ](https://amazonappdev2026.devpost.com/details/faqs) accepts Android TV Emulator demos; the [rules](https://amazonappdev2026.devpost.com/rules) refer to Fire OS/Vega. Native Fire OS/Vega verification remains outstanding. Include suitable platform footage or obtain organizer clarification.
+
+## License
+
+[MIT-0](LICENSE), retaining the original Amazon notice. See [licensing and provenance](docs/licensing.md) for details on the sample, contributions and media. MIT-0 permits copying and modification.
+
+<details>
+<summary>Earlier project documentation and original media sample reference</summary>
+
+The following documentation is retained for reference. Earlier local-only and future-AWS descriptions are historical; the current FormFit behavior is described above.
+
 # FormFit TV
 
 [![React Native](https://img.shields.io/badge/React%20Native-v0.81-blue.svg)](https://reactnative.dev/)
@@ -681,3 +1002,6 @@ For questions, issues, or feature requests, please open an issue on GitHub.
 ---
 
 Made for TV app developers
+
+
+</details>

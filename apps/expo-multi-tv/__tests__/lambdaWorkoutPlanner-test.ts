@@ -77,7 +77,17 @@ test('real handler generates, persists, deduplicates, saves and reads history us
   ).toBe(409);
   const history = await call('/v1/workouts/history', 'GET', {});
   expect(history.body.sessions).toEqual([summary]);
+  expect(history.body.plans).toEqual([plan]);
   expect(validResponse('history', history.body, { requestId: 'read-test' })).toBe(true);
+});
+
+test('history recovers previously generated plans without requiring a completion', async () => {
+  const { call, rows } = setup();
+  const generated = await call('/v1/workouts/generate', 'POST', { ...DEFAULT_CONFIG, fitnessLevel: 'advanced', durationMinutes: 30, requestId: 'old-plan' });
+  rows.delete('REQUEST#old-plan');
+  const history = await call('/v1/workouts/history', 'GET', {});
+  expect(history.body.sessions).toEqual([]);
+  expect(history.body.plans).toEqual([generated.body.plan]);
 });
 test('handler rejects unsupported free text, malformed data and impossible plans before writing', async () => {
   const { call, handler, store } = setup();

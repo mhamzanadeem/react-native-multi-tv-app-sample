@@ -73,7 +73,9 @@
       "apps/expo-multi-tv/__tests__/RemoteControlManager.ios-test.js",
       "apps/expo-multi-tv/__tests__/RemoteControlManager.web-test.js",
       "packages/shared-ui/src/utils/tvSelection.ts",
-      "packages/shared-ui/src/utils/tvSelection.vega.ts"
+      "packages/shared-ui/src/utils/tvSelection.vega.ts",
+      "apps/expo-multi-tv/plugins/withKeyEvent.js",
+      "apps/expo-multi-tv/__tests__/tvSelectDispatch-test.js"
     ]
   },
   {
@@ -125,7 +127,11 @@
       "packages/shared-ui/src/components/fitness/WorkoutHero.tsx",
       "packages/shared-ui/src/components/tvCardArtwork.ts",
       "packages/shared-ui/src/theme/fitness.ts",
-      "scripts/generate-tv-card-art.py"
+      "scripts/generate-tv-card-art.py",
+      "packages/shared-ui/src/components/fitness/WorkoutOptionGrid.tsx",
+      "packages/shared-ui/src/components/fitness/WorkoutStepper.tsx",
+      "apps/expo-multi-tv/__tests__/workoutStepper-test.js",
+      "apps/expo-multi-tv/__tests__/workoutOptionGrid-test.js"
     ]
   },
   {
@@ -215,7 +221,9 @@
       "docs/mock-api-test-scenarios.md",
       "scripts/commit-formfit-changes.ps1",
       "docs/commit-plan.json",
-      "docs/commit-plan.md"
+      "docs/commit-plan.md",
+      "docs/licensing.md",
+      "docs/setup.md"
     ]
   }
 ]

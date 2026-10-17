@@ -132,7 +132,8 @@ export function createHandler(store: DemoStore, newId: () => string, now = () =>
       }
       if (operation === 'history') {
         const sessions = await store.list('HISTORY#', 200);
-        return reply(200, { status: 'success', sessions, sampleData: false });
+        const plans = await store.list('PLAN#', 200);
+        return reply(200, { status: 'success', sessions, plans, sampleData: false });
       }
       if (operation === 'saveSession') {
         const summary = payload.summary as WorkoutSummary;

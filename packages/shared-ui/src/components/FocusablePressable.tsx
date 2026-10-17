@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import {
   AccessibilityInfo,
+  Platform,
   Animated,
   Pressable,
   Image,
@@ -21,7 +22,9 @@ import { resolveCardArtwork } from './tvCardArtwork';
 
 interface CustomPressableProps extends PressableProps {
   text: string;
+  cardLayout?: 'inline' | 'poster';
   description?: string;
+  actionLabel?: string;
   icon?: string;
   variant?: 'tile' | 'compact';
   backgroundImage?: ImageSourcePropType;
@@ -34,8 +37,10 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 function FocusSurface({
   isFocused,
+  cardLayout = 'inline',
   text,
   description,
+  actionLabel,
   icon,
   variant = 'tile',
   backgroundImage,
@@ -50,7 +55,7 @@ function FocusSurface({
     const animate = (reduceMotion: boolean) => {
       if (!current) return;
       Animated.timing(scale, {
-        toValue: isFocused && !props.disabled && !reduceMotion ? 1.04 : 1,
+        toValue: isFocused && !props.disabled && !reduceMotion ? 1.025 : 1,
         duration: reduceMotion ? 0 : 140,
         useNativeDriver: true,
       }).start();
@@ -101,21 +106,45 @@ function FocusSurface({
           accessible={false}
         />
         <View style={styles.rim} />
+        <View style={[styles.sheen, isFocused && !props.disabled && styles.sheenFocused]} />
         <View style={[styles.accent, isFocused && !props.disabled && styles.accentFocused]} />
       </View>
-      <Image
-        source={resolveCardArtwork(props.accessibilityLabel ?? text, icon)}
-        resizeMode="contain"
-        style={[styles.cardIcon, variant === 'compact' && styles.compactIcon]}
-        accessible={false}
-        importantForAccessibility="no"
-      />
+      {icon === 'menu' || icon === 'scroll-up' || icon === 'scroll-down' ? (
+        <Text
+          accessible={false}
+          style={[
+            styles.cardIcon,
+            { color: '#F5F6F8', fontSize: scaledPixels(36), lineHeight: scaledPixels(44), textAlign: 'center' },
+            variant === 'compact' && styles.compactIcon,
+            cardLayout === 'poster' && styles.posterIcon,
+          ]}>
+          {icon === 'menu' ? '\u2630' : icon === 'scroll-up' ? '\u2191' : '\u2193'}
+        </Text>
+      ) : (
+        <Image
+          source={resolveCardArtwork(props.accessibilityLabel ?? text, icon)}
+          resizeMode="contain"
+          style={[
+            styles.cardIcon,
+            variant === 'compact' && styles.compactIcon,
+            cardLayout === 'poster' && styles.posterIcon,
+          ]}
+          accessible={false}
+          importantForAccessibility="no"
+        />
+      )}
       {props.accessibilityState?.selected && (
         <View pointerEvents="none" accessible={false} style={styles.selectedBadge}>
           <Text style={styles.selectedMark}>{'\u2713'}</Text>
         </View>
       )}
-      <View pointerEvents="none" style={[styles.copy, variant === 'compact' && styles.compactCopy]}>
+      <View
+        pointerEvents="none"
+        style={[
+          styles.copy,
+          variant === 'compact' && styles.compactCopy,
+          cardLayout === 'poster' && styles.posterCopy,
+        ]}>
         <Text
           numberOfLines={1}
           style={[
@@ -125,7 +154,16 @@ function FocusSurface({
           ]}>
           {text}
         </Text>
-        {description && <Text style={styles.description}>{description}</Text>}
+        {description && (
+          <Text style={[styles.description, isFocused && !props.disabled && { color: colors.text }]}>
+            {description}
+          </Text>
+        )}
+        {actionLabel && (
+          <View style={styles.toggleAction}>
+            <Text style={styles.toggleActionText}>{actionLabel}</Text>
+          </View>
+        )}
       </View>
     </AnimatedPressable>
   );
@@ -166,6 +204,11 @@ const styles = StyleSheet.create({
     minWidth: scaledPixels(280),
     minHeight: scaledPixels(112),
     maxWidth: '100%',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: scaledPixels(5) },
+    shadowOpacity: 0.2,
+    shadowRadius: scaledPixels(10),
+    elevation: 2,
   },
   compact: {},
   artLayer: { ...StyleSheet.absoluteFillObject, borderRadius: scaledPixels(15), overflow: 'hidden' },
@@ -176,25 +219,34 @@ const styles = StyleSheet.create({
     height: scaledPixels(180),
     end: scaledPixels(-30),
     top: scaledPixels(-15),
-    opacity: 0.12,
+    opacity: 0.06,
   },
-  compactGhost: { width: scaledPixels(100), height: scaledPixels(100), top: scaledPixels(-12), opacity: 0.08 },
+  compactGhost: { width: scaledPixels(100), height: scaledPixels(100), top: scaledPixels(-12), opacity: 0.04 },
   rim: {
     ...StyleSheet.absoluteFillObject,
     borderWidth: 1,
-    borderColor: 'rgba(143, 174, 255, 0.22)',
+    borderColor: 'rgba(183, 191, 204, 0.14)',
     borderRadius: scaledPixels(15),
   },
+  sheen: {
+    position: 'absolute',
+    top: 0,
+    start: scaledPixels(18),
+    end: scaledPixels(18),
+    height: scaledPixels(1),
+    backgroundColor: 'rgba(245, 246, 248, 0.12)',
+  },
+  sheenFocused: { backgroundColor: colors.focusBorder },
   accent: {
     position: 'absolute',
     top: 0,
     start: scaledPixels(20),
     width: scaledPixels(40),
     height: scaledPixels(3),
-    backgroundColor: '#718EFF',
+    backgroundColor: '#414854',
     borderRadius: scaledPixels(2),
   },
-  accentFocused: { width: scaledPixels(72), backgroundColor: '#9CEEFF' },
+  accentFocused: { width: scaledPixels(72), backgroundColor: '#B8D2FF' },
   cardIcon: { position: 'absolute', start: scaledPixels(16), width: scaledPixels(44), height: scaledPixels(44) },
   compactIcon: {
     position: 'absolute',
@@ -205,6 +257,14 @@ const styles = StyleSheet.create({
   },
   copy: { paddingStart: scaledPixels(64), paddingEnd: scaledPixels(24), flexShrink: 1 },
   compactCopy: {},
+  posterIcon: {
+    position: 'relative',
+    start: 0,
+    marginBottom: scaledPixels(16),
+    width: scaledPixels(48),
+    height: scaledPixels(48),
+  },
+  posterCopy: { paddingStart: 0, paddingEnd: 0, width: '100%' },
   selectedBadge: {
     position: 'absolute',
     top: scaledPixels(12),
@@ -212,33 +272,46 @@ const styles = StyleSheet.create({
     width: scaledPixels(28),
     height: scaledPixels(28),
     borderRadius: scaledPixels(7),
-    backgroundColor: '#15243F',
+    backgroundColor: '#20242B',
     borderWidth: 1,
-    borderColor: '#93B8D6',
+    borderColor: '#8EAAFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  selectedMark: { color: '#D7F1FF', fontSize: scaledPixels(18), lineHeight: scaledPixels(22), fontWeight: '700' },
+  selectedMark: { color: '#D6E2FF', fontSize: scaledPixels(18), lineHeight: scaledPixels(22), fontWeight: '700' },
   description: {
-    color: '#D3DBEB',
-    fontSize: scaledPixels(20),
-    lineHeight: scaledPixels(28),
+    color: '#B7BFCC',
+    fontSize: scaledPixels(22),
+    lineHeight: scaledPixels(32),
+    fontWeight: '500',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-medium' : undefined,
     marginTop: scaledPixels(12),
   },
-  disabled: { opacity: 0.5 },
+  toggleAction: {
+    alignSelf: 'flex-start',
+    marginTop: scaledPixels(16),
+    borderRadius: scaledPixels(8),
+    paddingVertical: scaledPixels(8),
+    paddingHorizontal: scaledPixels(16),
+    backgroundColor: colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  toggleActionText: { color: colors.text, fontSize: scaledPixels(20), fontWeight: '600' },
+  disabled: { opacity: 0.5, shadowOpacity: 0, elevation: 0 },
   watchButtonFocused: {
     backgroundColor: colors.focusBackground,
-    borderColor: '#9CEEFF',
+    borderColor: '#B8D2FF',
 
     // Shadow for depth
-    shadowColor: '#6B8FFF',
+    shadowColor: '#8EAAFF',
     shadowOffset: {
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.85,
-    shadowRadius: scaledPixels(22),
-    elevation: 12,
+    shadowOpacity: 0.42,
+    shadowRadius: scaledPixels(20),
+    elevation: 7,
   },
   watchButtonText: {
     color: colors.text,

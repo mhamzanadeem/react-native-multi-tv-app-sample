@@ -1,13 +1,13 @@
 import { colors } from './colors';
 export const fitnessColors = {
   ...colors,
-  background: '#080D20',
-  backgroundElevated: '#14203E',
-  card: '#14203A',
-  cardElevated: '#202E40',
-  primary: '#A2BAFF',
-  textSecondary: '#C4CDDC',
-  textTertiary: '#A1AFC3',
-  border: '#3E5380',
+  background: '#101114',
+  backgroundElevated: '#20242B',
+  card: '#1C1F26',
+  cardElevated: '#282D36',
+  primary: '#8EAAFF',
+  textSecondary: '#B7BFCC',
+  textTertiary: '#A0A9B8',
+  border: '#414854',
   accent: '#FFBE7B',
 };

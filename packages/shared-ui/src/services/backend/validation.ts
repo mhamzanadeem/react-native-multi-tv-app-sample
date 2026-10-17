@@ -108,6 +108,17 @@ export function validResponse<K extends Operation>(
       Array.isArray(value.sessions) &&
       value.sessions.length <= 200 &&
       value.sessions.every(isWorkoutSummary) &&
+      (value.plans === undefined ||
+        (Array.isArray(value.plans) &&
+          value.plans.length <= 200 &&
+          value.plans.every((plan) => {
+            try {
+              validatePlan(plan);
+              return true;
+            } catch {
+              return false;
+            }
+          }))) &&
       new Set(value.sessions.map((s) => s.id)).size === value.sessions.length &&
       typeof value.sampleData === 'boolean'
     );

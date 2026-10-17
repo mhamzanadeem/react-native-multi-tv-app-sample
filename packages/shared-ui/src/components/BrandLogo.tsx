@@ -2,19 +2,19 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 import { scaledPixels as px } from '../hooks/useScale';
 
-export default function BrandLogo() {
+export default function BrandLogo({ large = false }: { large?: boolean }) {
   return (
     <View
       accessible
       accessibilityLabel="FormFit TV"
-      style={{ flexDirection: 'row', alignItems: 'center', gap: px(12) }}>
+      style={{ flexDirection: 'row', alignItems: 'center', gap: px(large ? 20 : 12) }}>
       <Image
         source={require('../assets/branding/formfit-logo.png')}
         accessible={false}
-        style={{ width: px(52), height: px(52), borderRadius: px(10) }}
+        style={{ width: px(large ? 92 : 52), height: px(large ? 92 : 52), borderRadius: px(large ? 16 : 10) }}
       />
-      <Text style={{ color: '#ECF3FF', fontSize: px(26), fontWeight: '700' }}>
-        FormFit <Text style={{ color: '#A2BAFF' }}>TV</Text>
+      <Text style={{ color: '#F5F6F8', fontSize: px(large ? 44 : 26), fontWeight: '700' }}>
+        FormFit <Text style={{ color: '#8EAAFF' }}>TV</Text>
       </Text>
     </View>
   );

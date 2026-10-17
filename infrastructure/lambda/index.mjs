@@ -2,12 +2,13 @@ import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { DynamoDBClient, GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 const require = createRequire(import.meta.url);
-const { createHandler } = require('./infrastructure/lambda/handler.js');
+const { createGuestHandler } = require('./infrastructure/lambda/guestHandler.js');
 const client = new DynamoDBClient({});
 const TableName = process.env.TABLE_NAME;
 if (!TableName) throw new Error('TABLE_NAME is required.');
-const pk = { S: 'DEMO#shared' };
-const store = {
+function storeForPartition(partition) {
+const pk = { S: partition };
+return {
   async get(key) {
     const result = await client.send(new GetItemCommand({ TableName, Key: { pk, sk: { S: key } }, ConsistentRead: true }));
     return result.Item?.payload?.S ? JSON.parse(result.Item.payload.S) : null;
@@ -35,7 +36,8 @@ const store = {
     return rows;
   },
 };
-const handle = createHandler(store, randomUUID, Date.now, process.env.AWS_REGION);
+}
+const handle = createGuestHandler(storeForPartition, randomUUID, Date.now, process.env.AWS_REGION);
 export const handler = async (event) => {
   const result = await handle(event);
   console.info(JSON.stringify({ route: event.routeKey, status: result.statusCode, awsRequestId: event.requestContext?.requestId }));

@@ -1,0 +1,116 @@
+1
+00:00:00,000 --> 00:00:08,000
+Your television can be more than
+a screen for watching workouts.
+
+2
+00:00:08,000 --> 00:00:19,000
+FormFit TV turns your preferences into a guided
+exercise plan, controlled entirely with a remote.
+
+3
+00:00:19,000 --> 00:00:23,000
+No typing or account setup
+is needed to get started.
+
+4
+00:00:25,000 --> 00:00:28,000
+The builder guides you
+through ten clear steps.
+
+5
+00:00:28,000 --> 00:00:34,000
+Choose your goal, experience,
+available time and equipment,
+
+6
+00:00:34,000 --> 00:00:40,000
+then refine workout style, body focus,
+movement position and recovery.
+
+7
+00:00:40,000 --> 00:00:43,000
+You can also exclude exercises.
+
+8
+00:00:43,000 --> 00:00:47,000
+Each card explains its effect,
+
+9
+00:00:47,000 --> 00:00:53,000
+while checkmarks distinguish your choices
+from the remote's current focus.
+
+10
+00:00:53,000 --> 00:00:59,000
+These choices become a real request
+to Amazon API Gateway.
+
+11
+00:00:59,000 --> 00:01:06,000
+Lambda validates the preferences and builds
+a workout using catalogue rules,
+
+12
+00:01:06,000 --> 00:01:12,000
+then stores the plan in DynamoDB.
+This is rule-based personalization,
+
+13
+00:01:12,000 --> 00:01:19,000
+not an AI claim. The generated workout
+immediately appears in Recent Sessions.
+
+14
+00:01:19,000 --> 00:01:29,000
+During the workout, the television manages
+exercise timing, sets, rest and transitions locally.
+
+15
+00:01:29,000 --> 00:01:36,000
+The remote lets me pause, resume,
+finish a set or skip an exercise.
+
+16
+00:01:36,000 --> 00:01:41,000
+Keeping execution local means
+an interrupted connection
+
+17
+00:01:41,000 --> 00:01:45,000
+does not need to interrupt the timer.
+
+18
+00:01:46,000 --> 00:01:50,000
+Here is the completion
+from that recorded session.
+
+19
+00:01:50,000 --> 00:01:56,000
+Progress separates completed exercises,
+skips and actual active time.
+
+20
+00:01:56,000 --> 00:02:04,000
+Generated plans and completed sessions
+share one history, so users can return
+
+21
+00:02:04,000 --> 00:02:10,000
+to a previous workout without confusing
+plan creation with exercise completion.
+
+22
+00:02:10,000 --> 00:02:20,000
+Built on React Native TV, FormFit separates shared
+interface components, workout logic and cloud services.
+
+23
+00:02:20,000 --> 00:02:28,000
+A persistent guest TV ID groups
+each installation's records without sign-in.
+
+24
+00:02:28,000 --> 00:02:37,000
+FormFit makes personalized, remote-controlled fitness
+available on the screen already in your living room.

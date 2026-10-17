@@ -28,7 +28,7 @@ export default function DrawerNavigator() {
       screenOptions={{
         headerShown: false,
         drawerActiveBackgroundColor: '#3498db',
-        drawerActiveTintColor: '#ffffff',
+        drawerActiveTintColor: '#F5F6F8',
         drawerInactiveTintColor: '#bdc3c7',
         drawerStyle: styles.drawerStyle,
         drawerLabelStyle: styles.drawerLabelStyle,
@@ -76,8 +76,8 @@ export default function DrawerNavigator() {
 
 const drawerStyles = StyleSheet.create({
   drawerStyle: {
-    width: scaledPixels(300),
-    backgroundColor: '#2c3e50',
+    width: scaledPixels(520),
+    backgroundColor: '#17191F',
     paddingTop: scaledPixels(0),
   },
   drawerLabelStyle: {

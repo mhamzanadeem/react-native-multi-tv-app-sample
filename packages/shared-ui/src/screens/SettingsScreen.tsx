@@ -1,139 +1,102 @@
-import { StyleSheet, View, Text, type ScrollView } from 'react-native';
-import {
-  SpatialNavigationRoot,
-  SpatialNavigationView,
-  SpatialNavigationNode,
-  SpatialNavigationScrollView,
-  DefaultFocus,
-} from 'react-tv-space-navigation';
-import { DrawerActions, useIsFocused, useNavigation } from '@react-navigation/native';
-import { Direction } from '@bam.tech/lrud';
+import { StyleSheet, View, Text } from 'react-native';
+import { SpatialNavigationNode, DefaultFocus } from 'react-tv-space-navigation';
+import { useState } from 'react';
 import { scaledPixels } from '../hooks/useScale';
 import { safeZones } from '../theme';
 import { fitnessColors as colors } from '../theme/fitness';
-import FitnessSidebar from '../components/fitness/FitnessSidebar';
 import FocusablePressable from '../components/FocusablePressable';
-import { useCallback, useRef, useState } from 'react';
-import { useMenuContext } from '../components/MenuContext';
-import { getOpenDrawerDirection } from '../utils/rtl';
+import FitnessScreen from '../components/fitness/FitnessScreen';
 
 export default function SettingsScreen() {
-  const scrollRef = useRef<ScrollView>(null);
-  const isFocused = useIsFocused();
-  const navigation = useNavigation();
-  const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const [selectedQuality, setSelectedQuality] = useState('Auto');
   const [notifications, setNotifications] = useState(true);
   const [autoplay, setAutoplay] = useState(true);
-
   const qualityOptions = ['Auto', '1080p', '720p', '480p'];
-
-  const onDirectionHandledWithoutMovement = useCallback(
-    (movement: Direction) => {
-      if (movement === 'up') scrollRef.current?.scrollTo({ y: 0, animated: true });
-      if (movement === getOpenDrawerDirection()) {
-        navigation.dispatch(DrawerActions.openDrawer());
-        toggleMenu(true);
-      }
-    },
-    [toggleMenu, navigation],
-  );
-
   return (
-    <SpatialNavigationRoot
-      isActive={isFocused && !isMenuOpen}
-      onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
-      <SpatialNavigationView direction="horizontal" style={styles.container}>
-        <FitnessSidebar title="Settings" />
-        <SpatialNavigationView direction="vertical" style={styles.innerContainer}>
-          <Text style={styles.title}>Settings</Text>
-          <SpatialNavigationScrollView ref={scrollRef} style={styles.scrollView}>
-            <View style={styles.scrollContent}>
-              {/* Video Quality Section */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Video Quality</Text>
-                <SpatialNavigationNode orientation="horizontal">
-                  <View style={styles.optionsRow}>
-                    {qualityOptions.map((quality, index) =>
-                      index === 0 ? (
-                        <DefaultFocus key={quality}>
-                          <FocusablePressable
-                            text={quality}
-                            onSelect={() => setSelectedQuality(quality)}
-                            style={[styles.optionButton, selectedQuality === quality && styles.selectedOption]}
-                          />
-                        </DefaultFocus>
-                      ) : (
-                        <FocusablePressable
-                          key={quality}
-                          text={quality}
-                          onSelect={() => setSelectedQuality(quality)}
-                          style={[styles.optionButton, selectedQuality === quality && styles.selectedOption]}
-                        />
-                      ),
-                    )}
-                  </View>
-                </SpatialNavigationNode>
-              </View>
-
-              {/* Playback Section */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Playback</Text>
-                <SpatialNavigationNode orientation="vertical">
-                  <View style={styles.optionsColumn}>
+    <FitnessScreen title="Settings" eyebrow="YOUR PREFERENCES" drawer>
+      <View style={styles.scrollContent}>
+        {/* Video Quality Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Video Quality</Text>
+          <SpatialNavigationNode orientation="horizontal">
+            <View style={styles.optionsRow}>
+              {qualityOptions.map((quality, index) =>
+                index === 0 ? (
+                  <DefaultFocus key={quality}>
                     <FocusablePressable
-                      text={`Autoplay: ${autoplay ? 'On' : 'Off'}`}
-                      onSelect={() => setAutoplay(!autoplay)}
-                      style={styles.toggleButton}
+                      text={quality}
+                      onSelect={() => setSelectedQuality(quality)}
+                      style={[styles.optionButton, selectedQuality === quality && styles.selectedOption]}
                     />
-                    <FocusablePressable
-                      text={`Notifications: ${notifications ? 'On' : 'Off'}`}
-                      onSelect={() => setNotifications(!notifications)}
-                      style={styles.toggleButton}
-                    />
-                  </View>
-                </SpatialNavigationNode>
-              </View>
-
-              {/* About Section */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>About</Text>
-                <View style={styles.infoContainer}>
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Version</Text>
-                    <Text style={styles.infoValue}>1.0.0</Text>
-                  </View>
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Build</Text>
-                    <Text style={styles.infoValue}>2025.11.04</Text>
-                  </View>
-                </View>
-              </View>
-
-              {/* Actions Section */}
-              <View style={styles.section}>
-                <SpatialNavigationNode orientation="vertical">
-                  <View style={styles.optionsColumn}>
-                    <FocusablePressable
-                      text="Clear Cache (unavailable)"
-                      disabled
-                      onSelect={() => console.log('Clear cache')}
-                      style={styles.actionButton}
-                    />
-                    <FocusablePressable
-                      text="Sign Out (guest mode)"
-                      disabled
-                      onSelect={() => console.log('Sign out')}
-                      style={styles.actionButton}
-                    />
-                  </View>
-                </SpatialNavigationNode>
-              </View>
+                  </DefaultFocus>
+                ) : (
+                  <FocusablePressable
+                    key={quality}
+                    text={quality}
+                    onSelect={() => setSelectedQuality(quality)}
+                    style={[styles.optionButton, selectedQuality === quality && styles.selectedOption]}
+                  />
+                ),
+              )}
             </View>
-          </SpatialNavigationScrollView>
-        </SpatialNavigationView>
-      </SpatialNavigationView>
-    </SpatialNavigationRoot>
+          </SpatialNavigationNode>
+        </View>
+
+        {/* Playback Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Playback</Text>
+          <SpatialNavigationNode orientation="vertical">
+            <View style={styles.optionsColumn}>
+              <FocusablePressable
+                text={`Autoplay: ${autoplay ? 'On' : 'Off'}`}
+                onSelect={() => setAutoplay(!autoplay)}
+                style={styles.toggleButton}
+              />
+              <FocusablePressable
+                text={`Notifications: ${notifications ? 'On' : 'Off'}`}
+                onSelect={() => setNotifications(!notifications)}
+                style={styles.toggleButton}
+              />
+            </View>
+          </SpatialNavigationNode>
+        </View>
+
+        {/* About Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>About</Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Version</Text>
+              <Text style={styles.infoValue}>1.0.0</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Build</Text>
+              <Text style={styles.infoValue}>2025.11.04</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Actions Section */}
+        <View style={styles.section}>
+          <SpatialNavigationNode orientation="vertical">
+            <View style={styles.optionsColumn}>
+              <FocusablePressable
+                text="Clear Cache (unavailable)"
+                disabled
+                onSelect={() => console.log('Clear cache')}
+                style={styles.actionButton}
+              />
+              <FocusablePressable
+                text="Sign Out (guest mode)"
+                disabled
+                onSelect={() => console.log('Sign out')}
+                style={styles.actionButton}
+              />
+            </View>
+          </SpatialNavigationNode>
+        </View>
+      </View>
+    </FitnessScreen>
   );
 }
 

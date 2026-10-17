@@ -79,3 +79,28 @@ it('activates once per held Select key while retaining directional repeats', () 
   RemoteControlManager.removeKeydownListener(callback);
   onKeyUp({ keyCode: 23 });
 });
+
+it('does not activate the newly opened drawer on Select release', () => {
+  const up = keyEventMock.onKeyUpListener.mock.calls[0][0];
+  const actions: string[] = [];
+  let drawerOpen = false;
+  const handler = () => {
+    actions.push(drawerOpen ? 'close' : 'open');
+    drawerOpen = !drawerOpen;
+  };
+  const token = RemoteControlManager.addKeydownListener(handler);
+  try {
+    up({ keyCode: 23 });
+    onKeyDown({ keyCode: 23 });
+    onKeyDown({ keyCode: 23 });
+    up({ keyCode: 23 });
+    expect(actions).toEqual(['open']);
+    expect(drawerOpen).toBe(true);
+    onKeyDown({ keyCode: 23 });
+    up({ keyCode: 23 });
+    expect(actions).toEqual(['open', 'close']);
+  } finally {
+    RemoteControlManager.removeKeydownListener(token);
+    up({ keyCode: 23 });
+  }
+});

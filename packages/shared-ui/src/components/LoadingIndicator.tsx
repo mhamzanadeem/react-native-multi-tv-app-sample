@@ -5,7 +5,7 @@ const LoadingIndicator = React.memo(() => {
   const styles = loadingIndicatorStyles;
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color="#ffffff" />
+      <ActivityIndicator size="large" color="#F5F6F8" />
     </View>
   );
 });

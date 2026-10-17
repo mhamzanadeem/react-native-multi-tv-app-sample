@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 
 interface MenuContextType {
   isOpen: boolean;
+  openRequestId: number;
+  requestOpen: () => void;
   toggleMenu: (isOpen: boolean) => void;
 }
 
@@ -13,12 +15,16 @@ export const MenuProvider: React.FC<{ children: React.ReactNode; initiallyOpen?:
 }) => {
   const [isOpen, setIsOpen] = useState(initiallyOpen);
 
+  const [openRequestId, setOpenRequestId] = useState(0);
+  const requestOpen = useCallback(() => setOpenRequestId((id) => id + 1), []);
   const value = useMemo(
     () => ({
       isOpen,
+      openRequestId,
+      requestOpen,
       toggleMenu: setIsOpen,
     }),
-    [isOpen],
+    [isOpen, openRequestId, requestOpen],
   );
 
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;

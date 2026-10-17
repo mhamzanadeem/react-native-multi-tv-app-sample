@@ -8,6 +8,7 @@ export class AwsWorkoutBackend implements WorkoutBackend {
   constructor(
     config: BackendConfig,
     private transport: HttpTransport = (...args) => fetch(...args),
+    private installationIdProvider?: () => Promise<string>,
   ) {
     this.config = validateBackendConfig({ ...config, mode: 'aws' });
   }
@@ -32,9 +33,15 @@ export class AwsWorkoutBackend implements WorkoutBackend {
     });
     const request = async (): Promise<ApiResult<K>> => {
       try {
+        const installationId = await this.installationIdProvider?.();
         const response = await this.transport(`${this.config.baseUrl}${route.path}`, {
           method: route.method,
-          headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Request-Id': requestId },
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-Request-Id': requestId,
+            ...(installationId ? { 'X-TV-Installation-Id': installationId } : {}),
+          },
           ...(route.method === 'GET' ? {} : { body: JSON.stringify(input) }),
           ...(controller ? { signal: controller.signal } : {}),
           redirect: 'error',
@@ -48,7 +55,15 @@ export class AwsWorkoutBackend implements WorkoutBackend {
           body = null;
         }
         if (response.status >= 200 && response.status < 300) {
-          if (!validResponse(operation, body, input) || 'error' in body)
+          if (
+            !validResponse(operation, body, input) ||
+            'error' in body ||
+            (installationId &&
+              (!body ||
+                typeof body !== 'object' ||
+                !('installationId' in body) ||
+                body.installationId !== installationId))
+          )
             return failure(
               'aws',
               requestId,

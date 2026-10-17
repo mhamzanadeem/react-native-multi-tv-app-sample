@@ -1,5 +1,5 @@
 import BrandLogo from './BrandLogo';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, Platform, Text } from 'react-native';
 import { DrawerContentComponentProps, DrawerContentScrollView, useDrawerStatus } from '@react-navigation/drawer';
 import { DefaultFocus, SpatialNavigationRoot } from 'react-tv-space-navigation';
@@ -16,15 +16,22 @@ const items: { name: keyof DrawerParamList; label: string; icon: string }[] = [
   { name: 'Home', label: 'Home', icon: 'home' },
   { name: 'Workouts', label: 'Workouts', icon: 'strength' },
   { name: 'Progress', label: 'Progress', icon: 'chart' },
-  { name: 'AwsDemo', label: 'AWS demo lab', icon: 'cloud' },
   { name: 'Media', label: 'Media sample', icon: 'play' },
   { name: 'Explore', label: 'Explore sample', icon: 'grid' },
   { name: 'TV', label: 'TV sample', icon: 'home' },
+  { name: 'Settings', label: 'Settings', icon: 'settings' },
 ];
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const navigation = props.navigation;
-  const { isOpen, toggleMenu } = useMenuContext();
+  const { isOpen, toggleMenu, openRequestId } = useMenuContext();
   const status = useDrawerStatus();
+  const handledOpenRequest = useRef(0);
+  useEffect(() => {
+    if (openRequestId > handledOpenRequest.current) {
+      handledOpenRequest.current = openRequestId;
+      navigation.openDrawer();
+    }
+  }, [openRequestId, navigation]);
   useEffect(() => toggleMenu(status === 'open'), [status, toggleMenu]);
   const closeAtEdge = useCallback(
     (direction: Direction) => {
@@ -44,8 +51,18 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
     <SpatialNavigationRoot isActive={isOpen} onDirectionHandledWithoutMovement={closeAtEdge}>
       <View style={styles.container}>
         <View style={styles.header}>
+          <FocusablePressable
+            text="Close menu"
+            icon="menu"
+            accessibilityLabel="Close menu"
+            style={styles.link}
+            onSelect={() => {
+              navigation.closeDrawer();
+              toggleMenu(false);
+            }}
+          />
           <BrandLogo />
-          <Text style={styles.caption}>MOVE WELL. YOUR PACE.</Text>
+          <Text style={styles.caption}>Move well. Your pace.</Text>
         </View>
         <DrawerContentScrollView
           {...props}
@@ -74,16 +91,6 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             );
           })}
         </DrawerContentScrollView>
-        <View style={styles.footer}>
-          <FocusablePressable
-            text="Settings"
-            icon="settings"
-            variant="compact"
-            accessibilityLabel="Settings"
-            style={styles.link}
-            onSelect={() => select('Settings')}
-          />
-        </View>
       </View>
     </SpatialNavigationRoot>
   );
@@ -91,21 +98,20 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0C142B',
+    backgroundColor: '#17191F',
     borderEndWidth: 1,
-    borderEndColor: '#3E5380',
+    borderEndColor: '#414854',
     paddingTop: px(safeZones.titleSafe.vertical),
   },
   header: { paddingHorizontal: px(28), paddingBottom: px(28), gap: px(10) },
   brand: { color: c.text, fontSize: px(32), fontWeight: '700' },
   accent: { color: c.primary },
-  caption: { color: c.textSecondary, fontSize: px(18), lineHeight: px(26) },
-  link: { width: '100%', minWidth: 0, minHeight: px(84), marginBottom: px(12), backgroundColor: '#17233E' },
-  footer: {
-    paddingHorizontal: px(16),
-    paddingTop: px(16),
-    paddingBottom: px(safeZones.actionSafe.vertical),
-    borderTopWidth: 1,
-    borderTopColor: c.border,
+  caption: {
+    color: c.textSecondary,
+    fontSize: px(24),
+    lineHeight: px(34),
+    fontWeight: '600',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-medium' : undefined,
   },
+  link: { width: '100%', minWidth: 0, minHeight: px(84), marginBottom: px(12), backgroundColor: '#282D36' },
 });

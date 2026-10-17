@@ -1,25 +1,25 @@
 export const colors = {
   // Primary colors
-  primary: '#718EFF',
-  secondary: '#A19AFF',
+  primary: '#8EAAFF',
+  secondary: '#AAB9E8',
 
   // Backgrounds
-  background: '#080D20',
-  backgroundElevated: '#14203E',
-  card: '#14203A',
-  cardElevated: '#202E40',
+  background: '#101114',
+  backgroundElevated: '#20242B',
+  card: '#1C1F26',
+  cardElevated: '#282D36',
   overlay: '#1A1A1A',
 
-  // Text colors with proper contrast (WCAG AAA compliant)
-  text: '#FFFFFF',
-  textSecondary: '#C7C7CC',
-  textTertiary: '#8E8E93',
-  textOnPrimary: '#FFFFFF',
+  // Text tokens; verify contrast for the specific background pairing.
+  text: '#F5F6F8',
+  textSecondary: '#B7BFCC',
+  textTertiary: '#A0A9B8',
+  textOnPrimary: '#F5F6F8',
 
   // Border and dividers
-  border: '#3E5380',
-  borderLight: '#38383A',
-  divider: '#2C2C2E',
+  border: '#414854',
+  borderLight: '#414854',
+  divider: '#303640',
 
   // Status colors
   notification: '#FF453A',
@@ -29,11 +29,11 @@ export const colors = {
   info: '#0A84FF',
 
   // Focus and interaction states
-  focus: '#8DBBFF',
-  focusBorder: '#9CEEFF',
-  focusBackground: '#253E86',
+  focus: '#B8D2FF',
+  focusBorder: '#B8D2FF',
+  focusBackground: '#27334D',
   focusBackgroundSecondary: 'rgba(255, 255, 255, 0.15)',
-  focusGlow: 'rgba(107, 143, 255, 0.65)',
+  focusGlow: 'rgba(142, 170, 255, 0.22)',
 
   // Interactive states
   pressedOverlay: 'rgba(255, 255, 255, 0.1)',

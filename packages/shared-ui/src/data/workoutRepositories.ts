@@ -1,6 +1,7 @@
 ﻿import type { WorkoutSummary } from '../domain/workoutSession';
 import { DEFAULT_CONFIG, GOAL_LABELS, LEVEL_RANK, isWorkoutConfig } from '../domain/workoutConfig';
-import type { WorkoutConfig } from '../types/workout';
+import type { WorkoutConfig, WorkoutPlan } from '../types/workout';
+import { validatePlan } from '../services/workoutPlanner';
 import type { KeyValueStorage } from './storageTypes';
 
 export interface PreferencesRepository {
@@ -99,6 +100,29 @@ export function createRepositories(storage: KeyValueStorage, onFallback: (messag
   };
   const validHistory = (value: unknown): value is WorkoutSummary[] =>
     Array.isArray(value) && value.every(isWorkoutSummary);
+  const validPlans = (value: unknown): value is WorkoutPlan[] => {
+    if (!Array.isArray(value)) return false;
+    try {
+      value.forEach((plan) => validatePlan(plan));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const plans = {
+    list: () => read('formfit-plans-v1', validPlans, []),
+    append: (plan: WorkoutPlan): Promise<WorkoutPlan[]> => {
+      const operation = queue.then(async () => {
+        validatePlan(plan);
+        const rows = await plans.list();
+        const kept = [plan, ...rows.filter((row) => row.id !== plan.id)].slice(0, HISTORY_LIMIT);
+        await write('formfit-plans-v1', kept);
+        return kept;
+      });
+      queue = operation.catch(() => undefined);
+      return operation;
+    },
+  };
   const history: WorkoutHistoryRepository = {
     list: async () => {
       const rows = await read(HISTORY_KEY, validHistory, []);
@@ -117,5 +141,5 @@ export function createRepositories(storage: KeyValueStorage, onFallback: (messag
       return operation;
     },
   };
-  return { preferences, history, isPersistent: () => !memoryOnly };
+  return { preferences, history, plans, isPersistent: () => !memoryOnly };
 }
